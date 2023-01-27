@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, Text } from "react-native";
-import Header from "./Header";
-import Body from "./Body";
+import Header from "../components/Header";
+import Body from "../components/Home/Body";
 
 const Home = () => {
 
@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: '#333',
     }
 })
 
