@@ -24,7 +24,7 @@ const CustomerSupport = () => {
                     height: 24,
                     resizeMode: 'contain',
                     marginRight: 10,
-                }} source={require("../../assets/images/shippping.png")}/>
+                }} source={require("../../assets/icons/shippping.png")}/>
                 <View>
                     <Text style={{
                         color: '#000000',
@@ -56,7 +56,7 @@ const CustomerSupport = () => {
                     height: 24,
                     resizeMode: 'contain',
                     marginRight: 10,
-                }} source={require("../../assets/images/shippping.png")}/>
+                }} source={require("../../assets/icons/shippping.png")}/>
                 <View>
                     <Text style={{
                         color: '#000000',

@@ -10,7 +10,7 @@ const Search = () => {
                 justifyContent: 'center',
                 paddingLeft: 18,
             }}>
-                <Image style={styles.icon} source={require("../assets/images/search_icon.png")}/>
+                <Image style={styles.icon} source={require("../assets/icons/search_icon.png")}/>
                 <TextInput style={{
                     fontSize: 14,
                     color: '#f5f5f5',
