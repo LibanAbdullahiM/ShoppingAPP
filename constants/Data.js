@@ -1,4 +1,4 @@
-const PRODUCTSDATA = [
+const LISTPRODUCTS = [
     {
         id: 0,
         name: 'Nikon Camera',
@@ -202,4 +202,4 @@ const POPULARS = [
     }
 ]
 
-export { NewProductsData, POPULARS, PRODUCTSDATA, NewProductsData2 }
+export { NewProductsData, POPULARS, LISTPRODUCTS, NewProductsData2 }   

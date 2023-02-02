@@ -5,31 +5,9 @@ import Search from "./Search";
 const Header = () => {
     return (
         <View style={styles.container}>
-            <View style={{
-                width: '100%',
-                height: 57,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 8,
-
-                backgroundColor: '#000',
-            }}>
-               <TouchableOpacity style={{
-                width: 80,
-                height: 25,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: 12,
-
-                borderWidth: 1,
-                borderColor: '#0BB798',
-                borderRadius: 16,
-
-               }}>
-                <Text style={{
-                        fontSize: 16,
-                        color: '#0BB798'
-                    }}>RL</Text>
+            <View style={styles.statusBar}>
+               <TouchableOpacity style={styles.logo}>
+                <Text style={styles.txt}>RL</Text>
                </TouchableOpacity>
             </View>
             <Search />
@@ -48,6 +26,31 @@ const styles = StyleSheet.create({
 
         borderBottomRightRadius: 36,
         borderBottomLeftRadius: 36,
+    },
+    statusBar: {
+        width: '100%',
+        height: 57,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 8,
+
+        backgroundColor: '#000',
+    },
+    logo: {
+        width: 80,
+        height: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 12,
+
+        borderWidth: 1,
+        borderColor: '#0BB798',
+        borderRadius: 16,
+    },
+    txt: {
+        fontSize: 18,
+        color: '#0BB798',
+        fontFamily: 'InterSemiBold'
     }
 })
 

@@ -3,18 +3,10 @@ import { View, Text, StyleSheet, TouchableHighlight, Image, TouchableOpacity, Te
 
 const Search = () => {
     return (
-        <View style={styles.container}>
-            <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingLeft: 18,
-            }}>
+        <View style={styles.search_form}>
+            <View style={styles.input_group}>
                 <Image style={styles.icon} source={require("../assets/icons/search_icon.png")}/>
-                <TextInput style={{
-                    fontSize: 14,
-                    color: '#f5f5f5',
-                }} placeholder='Type Here...'/>
+                <TextInput style={styles.text_input} placeholder='Type Here...'/>
             </View>
            <TouchableOpacity style={styles.btn}>
                 <Text style={styles.text}>Search</Text>
@@ -24,16 +16,27 @@ const Search = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    search_form: {
         width: '90%',
         height: 45,
-        flexDirection: 'row',
+        position: 'relative',
         alignItems: 'center',
         justifyContent: 'space-between',
 
         backgroundColor: '#8A8A8A',
 
         borderRadius: 24,
+    },
+    input_group: {
+        width: '60%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 18,
+
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
     },
     btn: {
         width: 142,
@@ -46,12 +49,22 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
 
         borderRadius: 24,
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
     },
     text: {
         fontSize: 18,
         color: '#fff',
-        fontWeight: '500',
+        fontFamily: 'InterMedium',
 
+    },
+    text_input: {
+        width: '100%',
+        height: '100%',
+        fontSize: 14,
+        color: '#f5f5f5',
     },
     icon: {
         height: 18,
