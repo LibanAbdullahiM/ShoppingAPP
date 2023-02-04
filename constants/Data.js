@@ -1,3 +1,66 @@
+const CATEGORIES = [
+    {
+        id: 0,
+        name: 'Smartphones',
+        image: require("../assets/images/smartphones.png")
+    },
+    {
+        id: 1,
+        name: 'Taplets',
+        image: require("../assets/images/taplets.png")
+    },
+    {
+        id: 2,
+        name: 'Laptops',
+        image: require("../assets/images/laptops.png"),
+    },
+    {
+        id: 3,
+        name: 'Smartwatches',
+        image: require("../assets/images/smartwatches.png"),
+    },
+    {
+        id: 4,
+        name: 'Eyewears',
+        image: require("../assets/images/eyewears.png"),
+    },
+    {
+        id: 5,
+        name: 'Headhphones And Speakers',
+        image: require("../assets/images/airphone.png"),
+    },
+    {
+        id: 6,
+        name: 'Accessories For Mobiles',
+        image: require("../assets/images/accessories.png"),
+    },
+    {
+        id: 7,
+        name: 'SmartHome And Security',
+        image: require("../assets/images/smartHome.png")
+    },
+    {
+        id: 8,
+        name: 'TV and Display',
+        image: require("../assets/images/tv-display.png"),
+    },
+    {
+        id: 9,
+        name: 'Computers and Accessories',
+        image: require("../assets/images/computers-accessories.png"),
+    },
+    {
+        id: 10,
+        name: 'Cameras, Audio & Video',
+        image: require("../assets/images/cameras-audio-video.png"),
+    },
+    {
+        id: 11,
+        name: 'Office Equipments',
+        image: require("../assets/images/office-equipments.png")
+    }
+]
+
 const LISTPRODUCTS = [
     {
         id: 0,
@@ -202,4 +265,4 @@ const POPULARS = [
     }
 ]
 
-export { NewProductsData, POPULARS, LISTPRODUCTS, NewProductsData2 }   
+export { NewProductsData, POPULARS, LISTPRODUCTS, NewProductsData2, CATEGORIES }   
