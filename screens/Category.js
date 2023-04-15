@@ -8,15 +8,6 @@ const Category = () => {
     _renderItem = (data) => {
      return (
         <View style={styles.category} key={data.id}>
-            <View style={styles.imgBackground}>
-                <Image style={{
-                    width: '100%',
-                    height: '100%',
-
-                    borderRadius: 32,
-                    
-                }} resizeMode='cover' source={require("../assets/images/image-background.jpg")}/>
-            </View>
               <TouchableOpacity style={styles.image_view} onPress={() => alert(data.name)}>
                         <Image style={styles.img} source={data.image}/>
                 </TouchableOpacity>
@@ -60,14 +51,16 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 32,
     },
     category: {
-        width: '48%',
-        height: 250,
+        width: '31%',
+        height: 160,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
-        marginTop: 16,
+        margin: 2,
+        marginBottom: 40,
     },
     txt: {
         fontSize: 14,
@@ -75,13 +68,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     image_view: {
-        width: '98%',
-        height: '85%',
+        width: '100%',
+        height: '100%',
         margin: 3,
         justifyContent: 'center',
         alignItems: 'center',
 
-        backgroundColor: 'rgba(205, 194, 194, 0.52)',
+        borderWidth: 1,
+        borderColor: 'rgba(205, 194, 194, 0.52)',
         borderRadius: 32,
     },
     img: {
@@ -89,17 +83,6 @@ const styles = StyleSheet.create({
         height: '90%',
         resizeMode: 'contain'
     },
-    imgBackground: {
-        width: '98%',
-        height: '85%',
-
-        borderRadius: 32,
-        position: 'absolute',
-        top: 10,
-        left: 3,
-        right: 0,
-        zIndex: 0,
-},
 })
 
 export default Category;
