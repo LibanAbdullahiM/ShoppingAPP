@@ -1,8 +1,8 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, Text, Image, TouchableOpacity, FlatList, RefreshControl } from "react-native";
+import { View, StyleSheet, ScrollView, Text, Image, TouchableOpacity, FlatList, RefreshControl, TouchableHighlight } from "react-native";
 import {POPULARS }from '../../constants/Data';
 
-const Featured = () => {
+const Featured = ({navigation, route}) => {
 
     return (
         <View style={styles.featured_section}>
@@ -35,10 +35,10 @@ const Featured = () => {
                                             <Text style={[styles.small_txt, {color: '#fff'}]}>SALE!</Text>
                                         </View>
                                     </View>
-                                    <View style={styles.product_image}>
+                                    <TouchableOpacity style={styles.product_image} onPress={()=> navigation.navigate("Category", {screen: 'ProductDetails', params: {item: item}})}>
                                         <Image style={styles.image}
                                                 source={item.image}/>
-                                    </View>
+                                    </TouchableOpacity>
                                     <View style={styles.product_info}>
                                         <Text style={styles.lasrge_txt}>Extra Thock Super Absorbent...</Text>
                                         <Text style={[styles.small_txt, {color: '#8A8A8A', marginTop: 8,}]}>{item.name}</Text>

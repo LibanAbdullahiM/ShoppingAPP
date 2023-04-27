@@ -5,9 +5,9 @@ import CustomerSupport from "./CustomerSupport";
 import NewProducts from "./NewProducts";
 import Products from "./Products";
 import Featured from "./Featured";
-import { POPULARS, LISTPRODUCTS, NewProductsData2  } from "../../constants/Data";
+import { LISTPRODUCTS, NewProductsData2  } from "../../constants/Data";
 
-const Body = () => {
+const Body = ({navigation, route}) => {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={{
@@ -20,8 +20,7 @@ const Body = () => {
             <SmartTvScreen />
             <CustomerSupport />
             <NewProducts/>
-            <Products products={POPULARS}/>
-            <Featured />
+            <Featured navigation={navigation} route={route} />
             <View style={styles.section}>
                 {
                     NewProductsData2.map(item => {
@@ -42,7 +41,7 @@ const Body = () => {
                     })
                 }
             </View>
-            <Products products={LISTPRODUCTS}/>
+            <Products products={LISTPRODUCTS} title="Our Products" navigation={navigation} route={route}/>
         </ScrollView>
     )
 }

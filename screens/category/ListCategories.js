@@ -1,14 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet, FlatList, TouchableHighlight, Image, ScrollView, ImageBackground, TouchableOpacity } from "react-native";
-import Header from '../components/Header'
-import { CATEGORIES } from '../constants/Data'
+import Header from '../../components/Header'
+import { CATEGORIES } from '../../constants/Data'
 
-const Category = () => {
+const ListCategories = ({navigation}) => {
 
     _renderItem = (data) => {
      return (
         <View style={styles.category} key={data.id}>
-              <TouchableOpacity style={styles.image_view} onPress={() => alert(data.name)}>
+              <TouchableOpacity style={styles.image_view} onPress={() => navigation.navigate("ListProducts", {title:data.name})}>
                         <Image style={styles.img} source={data.image}/>
                 </TouchableOpacity>
             <Text style={styles.txt}>{data.name}</Text>
@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Category;
+export default ListCategories;

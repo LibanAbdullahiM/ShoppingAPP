@@ -1,41 +1,36 @@
 import React from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity, FlatList, RefreshControl } from "react-native";
+import { View, StyleSheet, Text, Image, TouchableOpacity, TouchableHighlight, FlatList, RefreshControl, TouchableWithoutFeedback } from "react-native";
 
-const Products = ({products}) => {
+const Products = ({products, title, navigation, route}) => {
+
     return (
-        <View style={styles.popular_section}>
+        <View style={styles.product_section}>
 
-            <View style={styles.popular_section_header}> 
-                <Text style={styles.title}>Most Popular</Text>
-                <View style={styles.line_separator}></View>
-                <TouchableOpacity style={styles.btn}>
-                    <Text style={[styles.small_txt, {color: '#fff'}]}>View All</Text>
-                </TouchableOpacity>
+            <View style={styles.product_section_header}> 
+                <Text style={styles.title}>{title}</Text>
             </View>
 
-            <View style={styles.popular_section_body}>
+            <View style={styles.product_section_body}>
                 {
                     products?.map((item, index) => {
                         return (
-                            <View key={index} style={[styles.column_product, { marginLeft: index == 0 || 2 ? 10 : 0}]}>
-                                <View style={styles.product_image}>
-                                    <Image style={styles.image}
-                                            source={item.image}/>
-                                </View>
-                                <View style={styles.product_info}>
-                                    <Text style={styles.lasrge_txt}>Extra Thock Super Absorbent...</Text>
-                                    <Text style={[styles.small_txt, {color: '#8A8A8A',}]}>{item.name}</Text>
-                                    <View style={styles.product_info_col}>
-                                        <View>
-                                            <Image style={styles.rating_icon} source={require("../../assets/images/rating.png")}/>
-                                            <Text style={[styles.lasrge_txt, {color: '#0BB798'}]}>${item.price}</Text>
-                                        </View>
-                                        <TouchableOpacity style={[styles.btn, { marginTop: 8, marginRight: 32,}]}>
-                                            <Text style={[styles.small_txt, {color: '#FFF'}]}>Add To Cart</Text>
+                            <TouchableOpacity key={index} style={{width: '33.3%', height: 360,}}
+                                            onPress={()=> navigation.navigate("Category", {screen: 'ProductDetails', params: {item: item}})}>
+                                <View style={[styles.column_product]}>
+                                    <View style={styles.image_view}>
+                                        <Image style={styles.image}
+                                                source={item.image}/>
+                                    </View>
+                                    <View style={styles.product_info}>
+                                        <Text style={[styles.lasrge_txt, {color: '#0BB798'}]}>${item.price}</Text>
+                                        <Text style={[styles.lasrge_txt, {color: '#000',}]}>Brand</Text>
+                                        <Text style={[styles.small_txt, {color: '#8A8A8A'}]}>{item.name} {item.name} {item.name}</Text>
+                                        <TouchableOpacity style={[styles.btn, { marginTop: 8, }]}>
+                                                <Text style={[styles.lasrge_txt, {color: '#FFF'}]}>В корзину</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                         )
                     })
                 }
@@ -45,14 +40,13 @@ const Products = ({products}) => {
 }
 
 const styles = StyleSheet.create({
-    popular_section: {
-        width: '95%',
+    product_section: {
+        width: '100%',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        marginTop: 10,
     },
-    popular_section_header: {
+    product_section_header: {
         width: '100%',
         height: 58,
         flexDirection: 'row',
@@ -69,7 +63,7 @@ const styles = StyleSheet.create({
         height: 35,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 32,
+        borderRadius: 8,
 
         backgroundColor: '#0BB798'
     },
@@ -79,15 +73,14 @@ const styles = StyleSheet.create({
         fontFamily: 'InterSemiBold',
     },
     small_txt:{
-        fontSize: 14,
+        fontSize: 12,
         fontFamily: 'InterLight',
     },
     lasrge_txt: {
-        fontSize: 18,
-        letterSpacing: 0.2,
+        fontSize: 16,
         fontFamily: 'InterMedium',
     },
-    popular_section_body: {
+    product_section_body: {
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'center',
@@ -95,40 +88,36 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
     },
     column_product:{
-        width: "45%",
+        width: "100%",
+        height: '100%',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 10,
+
+        borderBottomWidth: 0.4,
+        borderRightWidth: 0.4,
+        borderTopWidth: 0.4,
+        borderColor: '#8A8A8A',
+
     },
-    product_image: {
+    image_view: {
         width: '100%',
-        height: 229,
-        justifyContent: 'center',
+        height: '48%',
         alignItems: 'center',
 
     },
     image: {
         width: '100%',
         height: '100%',
-        resizeMode: 'center',
+        resizeMode: 'contain'
     },
     product_info:  {
         width: '100%',
-        height: 181,
+        height: '52%',
         flexDirection: 'column',
         justifyContent: 'center',
         paddingLeft: 10,
     },
-    product_info_col: {
-        width: '100%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        marginTop: 8,
-    },
-    rating_icon: {width: 100, height: 20, },
 })
 
 export default Products;

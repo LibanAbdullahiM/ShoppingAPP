@@ -1,14 +1,14 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, Text } from "react-native";
-import Header from "../components/Header";
-import Body from "../components/Home/Body";
+import Header from "../../components/Header";
+import Body from "../../components/Home/Body";
 
-const Home = () => {
+const Home = ({navigation, route}) => {
 
     return (
         <View style={styles.container}>
             <Header/>
-            <Body/>
+            <Body navigation={navigation} route={route}/>
         </View>
     )
 }

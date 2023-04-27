@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
-import Home from './screens/Home'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import Category from './screens/Category';
-import Account from './screens/Account';
-import ShoppingCart from './screens/ShoppingCart';
+import Home from './screens/Home/Home'
+import Category from './screens/category/Category';
+import Account from './screens/user/Account';
+import ShoppingCart from './screens/cart/ShoppingCart';
 
 const Tap = createBottomTabNavigator();
 

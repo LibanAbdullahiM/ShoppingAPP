@@ -7,7 +7,7 @@ const CATEGORIES = [
     {
         id: 1,
         name: 'Taplets',
-        image: require("../assets/images/taplets.png")
+        image: require("../assets/images/taplets.png"),
     },
     {
         id: 2,
@@ -37,7 +37,7 @@ const CATEGORIES = [
     {
         id: 7,
         name: 'SmartHome And Security',
-        image: require("../assets/images/smartHome.png")
+        image: require("../assets/images/smartHome.png"),
     },
     {
         id: 8,
@@ -65,115 +65,228 @@ const LISTPRODUCTS = [
     {
         id: 0,
         name: 'Nikon Camera',
-        description: 'Extra Thick Super Absorbent',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 569,
         image: require("../assets/images/nikon-camera.png")
     },
     {
         id: 1,
         name: 'Headhphones',
-        description: 'Extra Thick Super Absorbent',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 69,
         image: require("../assets/images/headphones.png")
     },
     {
         id: 2,
         name: 'HP Laptop',
-        description: 'Extra Thick Super Absorbent',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 945,
         image: require("../assets/images/laptop.png")
     },
     {
         id: 3,
         name: 'Hair Clippers For Men',
-        description: 'Extra Thick Super Absorbent',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 95,
         image: require("../assets/images/hair-cutter.png")
     },
     {
         id: 4,
-        name: 'Nikon Camera',
-        description: 'Extra Thick Super Absorbent',
+        name: 'Apple MackBook',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 569,
         image: require("../assets/images/apple-mack-book.png"),
     },
     {
         id: 5,
-        name: 'Headhphones',
-        description: 'Extra Thick Super Absorbent',
+        name: 'Flying Quadcopter',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 69,
         image: require("../assets/images/drone-camera.png"),
     },
     {
         id: 6,
         name: 'HP Laptop',
-        description: 'Extra Thick Super Absorbent',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 945,
         image: require("../assets/images/apple-mack-book.png"),
     },
     {
         id: 7,
-        name: 'Hair Clippers For Men',
-        description: 'Extra Thick Super Absorbent',
+        name: 'Coffee Maker',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 95,
         image: require("../assets/images/coffe-maker.png"),
     },
     {
         id: 8,
         name: 'Nikon Camera',
-        description: 'Extra Thick Super Absorbent',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 569,
         image: require("../assets/images/nikon-camera.png")
     },
     {
         id: 9,
-        name: 'Headhphones',
-        description: 'Extra Thick Super Absorbent',
+        name: 'Coffee Maker',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 69,
         image: require("../assets/images/coffe-maker.png"),
     },
     {
         id: 10,
         name: 'HP Laptop',
-        description: 'Extra Thick Super Absorbent',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 945,
         image: require("../assets/images/laptop.png")
     },
     {
         id: 11,
         name: 'Hair Clippers For Men',
-        description: 'Extra Thick Super Absorbent',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 95,
         image: require("../assets/images/hair-cutter.png")
     },
     {
         id: 12,
-        name: 'Nikon Camera',
-        description: 'Extra Thick Super Absorbent',
+        name: 'Aplle MackBook',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 569,
         image: require("../assets/images/apple-mack-book.png"),
     },
     {
         id: 13,
         name: 'Headhphones',
-        description: 'Extra Thick Super Absorbent',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 69,
         image: require("../assets/images/headphones.png")
     },
     {
         id: 14,
         name: 'HP Laptop',
-        description: 'Extra Thick Super Absorbent',
+        description: 'description description description description'
+        + 'description description description description description '
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description'
+        + 'escription description description',
         price: 945,
         image: require("../assets/images/laptop.png")
     },
-    {
-        id: 15,
-        name: 'Hair Clippers For Men',
-        description: 'Extra Thick Super Absorbent',
-        price: 95,
-        image: require("../assets/images/hair-cutter.png")
-    }
 ]
 
 const NewProductsData = [
