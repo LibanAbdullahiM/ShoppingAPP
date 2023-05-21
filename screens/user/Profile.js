@@ -1,25 +1,69 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
+
 
 const {width} = Dimensions.get("window");
 
-const ShoppingCart = ({navigation}) => {
+const Profile = ({navigation, route}) => {
+
+    const [userdetails, setUserDetails] = useState({});
+
+    const {setIsLogged} = route.params;
+
+    useEffect(() => {
+
+        getUserData()
+
+    }, [])
+
+    const getUserData = async () => {
+
+        try {
+            const data = await AsyncStorage.getItem("UserDetails");
+            if(data !== null){
+                //console.log(data)
+                setUserDetails(JSON.parse(data));
+            }
+        } catch (error) {
+            
+        }
+    }
+
+    const logout = async () => {
+
+        try {
+            await AsyncStorage.removeItem('UserDetails');
+            setIsLogged(false)
+            navigation.navigate("Account", {screen: 'Loging'});
+        } catch (error) {
+            
+        }
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.statusBar}></View>
-                <View style={styles.cart_header}>
-                    <Text style={[styles.large_txt, {marginTop: 8, marginLeft: 16,}]}>КОРЗИНА</Text>
-                </View>
             </View>
-            <View style={styles.card}>
+
+            <View style={styles.profile_card}>
                 <View style={styles.image_View}>
-                    <Image style={styles.image} source={require("../../assets/icons/shopping-cart.png")}/>
+                    <Image style={styles.image} source={require("../../assets/icons/prifle-icon.png")}/>
+                    <View>
+                        <Text style={styles.large_txt}>{userdetails.firstName}</Text>
+                        {/* <Text style={styles.large_txt}>{userdetails?.roles[0]?.role}</Text> */}
+                    </View>
                 </View>
-                <Text style={styles.large_txt}>Ваша Корзина пуста</Text>
-                <Text style={styles.small_txt}>Воспользуйтесь каталогом, чтобы добавить товар</Text>
-                <TouchableOpacity style={styles.btn} onPress={()=> navigation.navigate("Category")}>
-                    <Text style={[styles.large_txt, {color: '#fff',  marginTop: 16,}]}>ПЕРЕЙТИ В КОТОЛОГ</Text>
+                <Text style={styles.large_txt}>свой профиль</Text>
+                <Text style={styles.small_txt}>начните делать покупки прямо сейчас</Text>
+                <TouchableOpacity style={styles.btn} onPress={logout}>
+                    <Text style={[styles.large_txt, {color: '#fff',  marginTop: 10,}]}>Logout</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -36,33 +80,22 @@ const styles = StyleSheet.create({
     },
     header: {
         width: '100%',
-        height: 100,
+        height: 30,
         flexDirection: 'column',
         alignItems: 'center',
         position: 'absolute',
         top: 0,
 
         backgroundColor: width < 500 ? '#202B3F' : 'rgba(205, 194, 194, 0.52)',
-
-        borderBottomRightRadius: 36,
-        borderBottomLeftRadius: 36,
     },
-    cart_header: {
-        width: '100%',
-        height: 70,
-        justifyContent: 'center',
-        //backgroundColor: '#202B3F',
-
-        borderBottomRightRadius: 36,
-        borderBottomLeftRadius: 36,
-    },
-    card:{
+    profile_card:{
         justifyContent: 'center',
         alignItems: 'center',
         width: '90%',
         height: 250,
         backgroundColor: width < 500 ? '#3b3c3d' : '#fff',
         borderRadius: 8,
+        top: 0,
     },
     small_txt:{
         fontSize: 14,
@@ -116,14 +149,15 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexDirection: 'row',
     },
     image: {
-        width: '100%',
-        height: '100%',
+        width: '80%',
+        height: '80%',
         resizeMode: 'cover',
     }
 
 })
 
-export default ShoppingCart;
+export default Profile;

@@ -1,16 +1,22 @@
 import React from "react";
-import { View, Text, StyleSheet, FlatList, TouchableHighlight, Image, ScrollView, ImageBackground, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from "react-native";
 import Header from '../../components/Header'
-import { CATEGORIES } from '../../constants/Data'
+//import { CATEGORIES } from '../../constants/Data'
 
-const ListCategories = ({navigation}) => {
+const {width} = Dimensions.get("window");
 
-    _renderItem = (data) => {
+const ListCategories = ({navigation, route}) => {
+    
+    const {CATEGORIES} = route.params;
+
+    const _renderItem = (data) => {
      return (
         <View style={styles.category} key={data.id}>
-              <TouchableOpacity style={styles.image_view} onPress={() => navigation.navigate("ListProducts", {title:data.name})}>
-                        <Image style={styles.img} source={data.image}/>
-                </TouchableOpacity>
+            <TouchableOpacity style={styles.image_view} onPress={() => navigation.navigate("ListProducts", {title:data.name})}>
+                        <Image style={styles.img} source={{
+                            uri: 'http://192.168.1.104:8080/api/v1/categories/'+data.id+'/image'
+                        }}/>
+            </TouchableOpacity>
             <Text style={styles.txt}>{data.name}</Text>
         </View>
      )
@@ -39,6 +45,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+
+        backgroundColor: width < 500 ? 'rgba(0, 0, 0, 1)' : '#fff',
     },
     scrollview: {
         flex: 1,
@@ -54,18 +62,19 @@ const styles = StyleSheet.create({
         marginTop: 32,
     },
     category: {
-        width: '31%',
+        width: width < 500 ? '48%' : '31%',
         height: 160,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
-        margin: 2,
+        margin: 4,
         marginBottom: 40,
     },
     txt: {
         fontSize: 14,
         fontFamily: 'InterMedium',
         textAlign: 'center',
+        color: width < 500 ? '#fff' : '#000',
     },
     image_view: {
         width: '100%',
@@ -76,11 +85,13 @@ const styles = StyleSheet.create({
 
         borderWidth: 1,
         borderColor: 'rgba(205, 194, 194, 0.52)',
-        borderRadius: 32,
+        borderRadius: 16,
+
+        backgroundColor: 'rgba(255, 255, 255, 0.9)'
     },
     img: {
-        width: '90%',
-        height: '90%',
+        width: '100%',
+        height: '100%',
         resizeMode: 'contain'
     },
 })

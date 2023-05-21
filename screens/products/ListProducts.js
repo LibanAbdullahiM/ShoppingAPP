@@ -1,8 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet, FlatList, TouchableHighlight, Image, ScrollView, TouchableOpacity, RefreshControl } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity, RefreshControl } from "react-native";
 import Header from '../../components/Header'
 import { LISTPRODUCTS } from "../../constants/Data";
 import Products from "../../components/Home/Products";
+
+const {width} = Dimensions.get("window");
 
 const ListProducts = ({navigation, route}) => {
 
@@ -31,13 +33,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
+
+        backgroundColor: width < 500 ? 'rgba(0, 0, 0, 1)' : '#fff',
     },
     back_button: {
         width: 30,
-        height: 30,
+        height: 50,
         position: 'absolute',
-        top: '2.5%',
-        left: '1%',
+        top: width < 500 ? '15.7%' : '12.3%',
+
+        zIndex: 1,
         
         backgroundColor: '#345'
     },

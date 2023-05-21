@@ -1,31 +1,67 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Loging from './Loging';
+import Profile from './Profile';
+import Registring from './Registring';
+import { LogBox } from 'react-native';
 
-const Account = () => {
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
+
+const tab = createNativeStackNavigator();
+
+function Account() {
+
+    const [isLogged, setIsLogged] = useState(false);
+
+    const getData = async () => {
+
+        try {
+            const userdetails = await AsyncStorage.getItem('UserDetails');
+            if(userdetails !== null){
+                setIsLogged(true);
+            }else {
+                setIsLogged(false);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+
+        getData();
+
+    }, [setIsLogged])
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Sorry! Not Implemented Yet the User account page</Text>
-            <Text style={{
-                fontSize: 42,
-            }}>😢</Text>
-        </View>
+        <tab.Navigator>
+            {
+                isLogged ?
+                <tab.Screen name="Profile" component={Profile} options={{
+                    headerShown: false,
+                }} initialParams={{
+                    setIsLogged: setIsLogged
+                }}/>
+                :
+                <tab.Screen name="Loging" component={Loging} options={{
+                    headerShown: false,
+                }}  initialParams={{
+                    setIsLogged: setIsLogged
+                }}/>
+              
+
+            }
+               <tab.Screen name="Registring" component={Registring} options={{
+            headerShown: false,
+        }}/>
+        </tab.Navigator>
     )
 }
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    text: {
-        fontSize: 24,
-        fontWeight: '200',
-        fontFamily: 'InterSemiBold',
-        textAlign: 'center',
-    }
-})
 
 export default Account;

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { useState, useRef } from 'react';
-import { useScrollToTop } from '@react-navigation/native';
 import Header from '../../components/Header';
 import { LISTPRODUCTS } from '../../constants/Data';
 import Products from '../../components/Home/Products';
@@ -21,7 +20,7 @@ const ProductDetails = ({navigation, route}) => {
       });
 
     //change the pagination active status
-    changeActiveStatus = ({nativeEvent}) => {
+    const changeActiveStatus = ({nativeEvent}) => {
         const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
         if(slide !== active){
             setActive(slide);
@@ -39,18 +38,25 @@ const ProductDetails = ({navigation, route}) => {
 
     return (
         <View style={styles.container}>
-            <Header/>
-            <TouchableOpacity style={styles.back_button} onPress={() => navigation.goBack()}>
-                <Image style={styles.back_Icon} source={require("../../assets/icons/back.png")}/>
-            </TouchableOpacity>
-            <ScrollView ref={scrollRef} style={styles.container} contentContainerStyle={{
+            
+            <View style={styles.header}>
+                <View style={styles.statusBar}></View>
+                <View style={{width: '100%', height: 30, flexDirection: 'row', alignItems: 'center',}}>
+                    <TouchableOpacity style={styles.back_button} onPress={() => navigation.goBack()}>
+                        <Image style={styles.back_Icon} source={require("../../assets/icons/back.png")}/>
+                    </TouchableOpacity>
+                    <Text style={[styles.large_txt, {marginLeft: 10,}]}>{item.name}</Text>
+                </View>
+            </View>
+       
+            <ScrollView ref={scrollRef} style={[styles.container, {position: 'relative',   backgroundColor: width < 500 ? 'rgba(0, 0, 0, 1)' : '#fff', top: 60,}]} contentContainerStyle={{
             justifyContent: 'center',
             alignItems: 'center',
         }} refreshControl={
             <RefreshControl refreshing={false}/>
         }
         showsVerticalScrollIndicator={false}>
-            <View style={styles.image_view}>
+            <View style={[styles.image_view, {justifyContent: 'center', alignItems: 'center'}]}>
                 <ScrollView 
                     pagingEnabled 
                     horizontal
@@ -102,6 +108,14 @@ const ProductDetails = ({navigation, route}) => {
             </View>
             <Products products={LISTPRODUCTS} title='Похожие Товары' navigation={navigation} route={route}/>
             </ScrollView>
+            <View style={styles.buttons}>
+                <TouchableOpacity style={[styles.btn, {backgroundColor: 'rgba(201, 4, 4, 1)'}]}>
+                        <Text style={[styles.large_txt, {color: '#FFF'}]}>Купит Сейчас</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.btn, {backgroundColor: '#0BB798'}]}>
+                        <Text style={[styles.large_txt, {color: '#FFF'}]}>В корзину</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -109,15 +123,28 @@ const ProductDetails = ({navigation, route}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: '100%'
+        width: '100%',
+    },
+    header: {
+        width: '100%',
+        height: 60,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 0,
+
+        backgroundColor: width < 500 ? '#202B3F' : 'rgba(205, 194, 194, 0.52)',
     },
     image_view:{
         width: width,
         height: height,
+
+        backgroundColor: '#fff'
     },
     imge: {
         width: width,
-        height: height,
+        height:height,
         resizeMode: 'contain',
     },
 /*     paginationDot: {
@@ -189,6 +216,8 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         marginBottom: 12,
 
+        borderColor: width < 500 ? '#fff' : '#000',
+
         shadowColor: "#74858C",
 
         shadowOpacity: 0.5,
@@ -199,23 +228,46 @@ const styles = StyleSheet.create({
     small_txt:{
         fontSize: 12,
         fontFamily: 'InterLight',
+        color: width < 500 ? '#fff' : '#000',
     },
     large_txt: {
         fontSize: 16,
         fontFamily: 'InterMedium',
+        color: width < 500 ? '#fff' : '#000',
     },
     back_button: {
         width: 30,
         height: 30,
-        position: 'absolute',
-        top: '2.5%',
-        left: '1%',
-        
-        backgroundColor: '#345'
     },
     back_Icon: {
         width: '100%',
         height: '100%',
+    },
+    buttons: {
+        width: '100%',
+        height: 65,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 5,
+        padding: 4,
+    },
+    btn: {
+        width: "49%",
+        height: 55,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+
+    },
+    statusBar: {
+        width: '100%',
+        height: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
 })
 

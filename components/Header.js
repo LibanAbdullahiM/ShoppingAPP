@@ -1,14 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableHighlight, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import Search from "./Search";
+
+const {width} = Dimensions.get('window');
 
 const Header = () => {
     return (
         <View style={styles.container}>
             <View style={styles.statusBar}>
-               <TouchableOpacity style={styles.logo}>
-                <Text style={styles.txt}>RL</Text>
-               </TouchableOpacity>
             </View>
             <Search />
         </View>
@@ -18,23 +17,23 @@ const Header = () => {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        height: 125,
+        height: 100,
         flexDirection: 'column',
         alignItems: 'center',
 
-        backgroundColor: '#202B3F',
+        backgroundColor: width < 500 ? '#202B3F' : 'rgba(205, 194, 194, 0.52)',
 
         borderBottomRightRadius: 36,
         borderBottomLeftRadius: 36,
     },
     statusBar: {
         width: '100%',
-        height: 57,
+        height: 30,
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 8,
 
-        backgroundColor: '#000',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     logo: {
         width: 80,

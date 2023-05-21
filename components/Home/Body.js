@@ -1,11 +1,13 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, Text, Image, TouchableOpacity, FlatList, RefreshControl } from "react-native";
+import { View, StyleSheet, ScrollView, Text, Image, TouchableOpacity, Dimensions, RefreshControl } from "react-native";
 import SmartTvScreen from "./SmartTvScreen";
 import CustomerSupport from "./CustomerSupport";
 import NewProducts from "./NewProducts";
 import Products from "./Products";
 import Featured from "./Featured";
 import { LISTPRODUCTS, NewProductsData2  } from "../../constants/Data";
+
+const {width} = Dimensions.get("window");
 
 const Body = ({navigation, route}) => {
 

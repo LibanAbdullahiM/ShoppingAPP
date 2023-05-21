@@ -1,5 +1,8 @@
 import React from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity, TouchableHighlight, FlatList, RefreshControl, TouchableWithoutFeedback } from "react-native";
+import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from "react-native";
+
+
+const {width} = Dimensions.get("window");
 
 const Products = ({products, title, navigation, route}) => {
 
@@ -14,7 +17,7 @@ const Products = ({products, title, navigation, route}) => {
                 {
                     products?.map((item, index) => {
                         return (
-                            <TouchableOpacity key={index} style={{width: '33.3%', height: 360,}}
+                            <TouchableOpacity key={index} style={{width: width < 500 ? '48%' : '33.3%', height: 360,}}
                                             onPress={()=> navigation.navigate("Category", {screen: 'ProductDetails', params: {item: item}})}>
                                 <View style={[styles.column_product]}>
                                     <View style={styles.image_view}>
@@ -22,11 +25,11 @@ const Products = ({products, title, navigation, route}) => {
                                                 source={item.image}/>
                                     </View>
                                     <View style={styles.product_info}>
-                                        <Text style={[styles.lasrge_txt, {color: '#0BB798'}]}>${item.price}</Text>
-                                        <Text style={[styles.lasrge_txt, {color: '#000',}]}>Brand</Text>
-                                        <Text style={[styles.small_txt, {color: '#8A8A8A'}]}>{item.name} {item.name} {item.name}</Text>
+                                        <Text style={[styles.large_txt, {color: '#0BB798'}]}>${item.price}</Text>
+                                        <Text style={[styles.large_txt, {color: '#000',}]}>Brand</Text>
+                                        <Text style={[styles.small_txt]}>{item.name} {item.name} {item.name}</Text>
                                         <TouchableOpacity style={[styles.btn, { marginTop: 8, }]}>
-                                                <Text style={[styles.lasrge_txt, {color: '#FFF'}]}>В корзину</Text>
+                                                <Text style={[styles.large_txt, {color: '#FFF'}]}>В корзину</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -48,10 +51,21 @@ const styles = StyleSheet.create({
     },
     product_section_header: {
         width: '100%',
-        height: 58,
-        flexDirection: 'row',
+        height: 50,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'center',
+        margin: 8,
+        borderWidth: 0.2,
+        borderRadius: 2,
+        borderColor: width < 500 ? '#fff' : '#000',
+        
+        shadowColor: "#74858C",
+
+        shadowOpacity: 0.5,
+        shadowRadius: 9.11,
+
+        elevation: 2,
+
     },
     line_separator: {
         flex: 1,
@@ -69,16 +83,20 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 20,
-        color: '#000',
         fontFamily: 'InterSemiBold',
+        color: width < 500 ? '#fff' : '#000',
+        textAlign: 'center',
+        marginLeft: 20,
     },
     small_txt:{
         fontSize: 12,
         fontFamily: 'InterLight',
+        color: width < 500 ? '#fff' : '#000',
     },
-    lasrge_txt: {
+    large_txt: {
         fontSize: 16,
         fontFamily: 'InterMedium',
+        color: width < 500 ? '#fff' : '#000',
     },
     product_section_body: {
         width: '100%',
