@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Input from '../../components/Input';
 import { LogBox } from 'react-native';
+import * as Updates from 'expo-updates';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -17,31 +18,9 @@ const Loging = ({navigation, route}) => {
 
     const [userName, changeUserName] = useState('');
     const [password, changePassword] = useState('');
-
-    const {setIsLogged} = route.params;
-
-    const getData = async () => {
-
-        try {
-            const userdetails = await AsyncStorage.getItem('UserDetails');
-            if(userdetails !== null){
-                setIsLogged(true);
-                navigation.navigate("Account", {screen: 'Profile'});
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-
-        getData();
-
-    }, [])
-
     
     let headers = new Headers();
-    headers.append();
+    headers.append("Authorization", "Basic " + base64.encode(userName+":"+password));
 
     const login = async () => {
 
@@ -54,18 +33,20 @@ const Loging = ({navigation, route}) => {
 
                 const response = await fetch('http://192.168.1.104:8080/api/v1/login', {
                     method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        Authorization: "Basic " + base64.encode(userName+":"+password)
-                        },
+                    headers: headers,
                 })
                 if(response.ok){
 
                     const data = await response.json();
-                    await AsyncStorage.setItem('UserDetails', JSON.stringify(data));
-                    setIsLogged(true);
-                    navigation.navigate("Account", {screen: 'Profile'});
+                    const newData = {
+                        ...data,
+                        password: password
+                    }
+
+                    await AsyncStorage.setItem('UserDetails', JSON.stringify(newData));
+                    //setIsLogged(true);
+                    Updates.reloadAsync();
+                    //navigation.navigate("Account", {screen: 'Profile'});
                     console.log("You have Logged!");
 
                 }else{
@@ -93,12 +74,12 @@ const Loging = ({navigation, route}) => {
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="UserName" value={userName} onChangeText={changeUserName} type="username" capitalize='none'/>
+                    }} label="UserName" value={userName} onChangeText={changeUserName} type="username" capitalize='none'  editable={true}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="Password" value={password} onChangeText={changePassword} type="password" capitalize='none'/>
+                    }} label="Password" value={password} onChangeText={changePassword} type="password" capitalize='none'  editable={true}/>
                 <TouchableOpacity style={styles.btn} onPress={login}>
                     <Text style={[styles.large_txt, {color: '#fff',  marginTop: 10,}]}>войдите</Text>
                 </TouchableOpacity>
@@ -122,7 +103,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
 
-        backgroundColor: width < 500 ? 'rgba(0, 0, 0, 1)' : '#fff',
+        backgroundColor: width < 500 ? 'rgba(0, 0, 0, 1)' : '#f2f2f2',
     },
     header: {
         width: '100%',
@@ -152,16 +133,19 @@ const styles = StyleSheet.create({
     },
     small_txt:{
         fontSize: 14,
-        fontFamily: 'InterLight',
+        lineHeight: 20,
+        letterSpacing: 0.25,
+        fontFamily: 'RobotoRegular', 
         marginBottom: 16,
         color: width < 500 ? '#fff' : '#000',
     },
     large_txt: {
         fontSize: 16,
-        letterSpacing: 0.5,
-        fontFamily: 'InterSemiBold',
+        lineHeight: 24,
+        letterSpacing: 0.15,
+        fontFamily: 'RobotoMedium',
         marginBottom: 16,
-        textAlign: 'center',
+        textAlign: 'left',
         color: width < 500 ? '#fff' : '#000',
     },
     btn: {

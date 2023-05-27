@@ -64,18 +64,10 @@ const CATEGORIES = [
 const LISTPRODUCTS = [
     {
         id: 0,
-        name: 'Nikon Camera',
-        description: 'description description description description'
-        + 'description description description description description '
-        + 'escription description description'
-        + 'escription description description'
-        + 'escription description description'
-        + 'escription description description'
-        + 'escription description description'
-        + 'escription description description'
-        + 'escription description description',
+        name: 'Canon EOS 4000D Kit (EF-S 18-55mm f/3.5-5.6 III)',
+        description: 'Цифровые зеркальные и беззеркальные камеры Canon со сменным объективом позволяют работать с объективами разного формата — от светосильных широкоугольных для максимальной детализации до телеобъективов, позволяющих снимать объекты с большого расстояния, — и дарят вам более широкие возможности для творчества.',
         price: 569,
-        image: require("../assets/images/nikon-camera.png")
+        image: require("../assets/images/canon1.png")
     },
     {
         id: 1,

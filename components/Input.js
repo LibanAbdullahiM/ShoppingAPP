@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, TextInput } from 'react-native';
 
-const Input = ({styles, label, value, onChangeText, type, capitalize}) => {
+const Input = ({styles, label, value, onChangeText, type, capitalize, editable}) => {
 
     return (
         <View style={styles.form_row}>
@@ -16,6 +16,7 @@ const Input = ({styles, label, value, onChangeText, type, capitalize}) => {
                 secureTextEntry
                 autoComplete={type}
                 autoCapitalize={capitalize}
+                
                 />
                 :
                 <TextInput
@@ -25,7 +26,7 @@ const Input = ({styles, label, value, onChangeText, type, capitalize}) => {
                 onChangeText={onChangeText}
                 autoComplete={type}
                 autoCapitalize={capitalize}
-                    
+                editable={editable}
                 />
             }
         </View>

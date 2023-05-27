@@ -3,27 +3,60 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Home from './screens/Home/Home'
-import Category from './screens/category/Category';
+import CategoryNativeStack from './screens/category/CategoryNativeStack';
 import Account from './screens/user/Account';
 import ShoppingCart from './screens/cart/ShoppingCart';
+import CartNativeStack from './screens/cart/CartNativeStack';
+import { useState, useEffect } from 'react';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const {width} = Dimensions.get("window");
-console.log("Width: " + width);
 
 const Tap = createBottomTabNavigator();
 
-export default function App() {
+export default function App({navigation, route}) {
+
+  const [badgeCount, setBadgeCount] = useState(0);
+  const [userdetails, setUserdetails] = useState({});
+  const [isLogged, setIsLogged] = useState(false);
 
   const [loaded] = useFonts({
-    InterBold: require('./assets/fonts/Inter-Bold.ttf'),
-    InterSemiBold: require('./assets/fonts/Inter-SemiBold.ttf'),
-    InterMedium: require('./assets/fonts/Inter-Medium.ttf'),
-    InterRegular: require('./assets/fonts/Inter-Regular.ttf'),
-    InterLight: require('./assets/fonts/Inter-Light.ttf'),
+    RobotoThin: require('./assets/fonts/Inter-Bold.ttf'),
+    RobotoLight: require('./assets/fonts/Inter-Bold.ttf'),
+    RobotoRegular: require('./assets/fonts/Inter-Regular.ttf'),
+    RobotoMedium: require('./assets/fonts/Inter-Medium.ttf'),
+    RobotoBold: require('./assets/fonts/Inter-SemiBold.ttf'),
+    RobotoBlack: require('./assets/fonts/Inter-Light.ttf'),
   })
 
+  const  getUserDetails = async () => {
+
+    try {
+        const _userdetails = await AsyncStorage.getItem('UserDetails');
+        if(_userdetails !== null){
+          setIsLogged(true)
+          setUserdetails(JSON.parse(_userdetails));
+
+        }
+    } catch (error) {
+        console.log(error)
+    }
+  };
+
+  useEffect(() => {
+
+    getUserDetails();
+    
+  }, [isLogged]);
+
   if(!loaded) return null;
+
   return (
     <NavigationContainer>
       <Tap.Navigator initialRouteName='Home' screenOptions={
@@ -34,6 +67,7 @@ export default function App() {
             tabBarInactiveBackgroundColor: width < 500 ? '#3b3c3d' : 'rgba(205, 194, 194, 0.52)',
             tabBarActiveTintColor: '#0BB798',
             tabBarInactiveTintColor: '#f5f5f5',
+            tabBarHideOnKeyboard: true,
           }
         }
         tabBarActiveTintColor = '#0BB798'>
@@ -46,7 +80,7 @@ export default function App() {
               />
             )
         }}}/>
-        <Tap.Screen name='Category' component={Category} options={{tabBarIcon: ({focused, size, color}) => {
+        <Tap.Screen name='CategoryNativeStack' component={CategoryNativeStack} options={{tabBarIcon: ({focused, size, color}) => {
           return (
             <FontAwesome
             name='list'
@@ -54,14 +88,19 @@ export default function App() {
             color={focused ? '#0BB798' : 'rgba(0, 0, 0, 0.9)'}/>
           )
         }}}/>
-        <Tap.Screen name='Корзина' component={ShoppingCart} options={{tabBarIcon: ({focused, size, color}) => {
+        <Tap.Screen name='CartNativeStack' component={CartNativeStack} options={{
+          tabBarBadge: badgeCount ? badgeCount : 0,
+          tabBarIcon: ({focused, size, color}) => {
           return (
             <FontAwesome
             name='shopping-cart'
             size={32}
             color={focused ? '#0BB798' : 'rgba(0, 0, 0, 0.9)'}/>
           )
-        }}}/>
+        }}}
+        initialParams={{
+          userdetails: userdetails,
+        }}/>
         <Tap.Screen name='Account' component={Account} options={{tabBarIcon: ({focused, size, color}) => {
           return (
             <FontAwesome
@@ -69,7 +108,11 @@ export default function App() {
             size={32}
             color={focused ? '#0BB798' : 'rgba(0, 0, 0, 0.9)'}/>
           )
-        }}}/>
+        }}}  
+        initialParams={{
+          userdetails: userdetails,
+          isLogged: isLogged,
+        }}/>
       </Tap.Navigator>
     </NavigationContainer>
   );
@@ -78,7 +121,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#F2F2F2',
     alignItems: 'center',
     justifyContent: 'center',
   },

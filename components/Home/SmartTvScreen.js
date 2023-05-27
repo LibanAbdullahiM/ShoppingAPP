@@ -32,8 +32,11 @@ const styles = StyleSheet.create({
     },
     txt: {
         fontSize: 32,
+        lineHeight: 40,
+        letterSpacing: 0,
+        fontFamily: 'RobotoRegular',
         color: '#fff',
-        fontFamily: 'InterBold',
+        
     },
     img: {
         height: '100%',

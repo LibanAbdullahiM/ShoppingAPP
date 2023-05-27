@@ -84,32 +84,32 @@ const Registring = ({navigation}) => {
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="FirstName" value={firstName} onChangeText={changeFirstName} type="name" capitalize='sentences'/>
+                    }} label="FirstName" value={firstName} onChangeText={changeFirstName} type="name" capitalize='sentences'  editable={true}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="LastName" value={lastName} onChangeText={changeLastName} type="name" capitalize='sentences'/>
+                    }} label="LastName" value={lastName} onChangeText={changeLastName} type="name" capitalize='sentences'  editable={true}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="Email" value={email} onChangeText={changeEmail} type="email" capitalize='none'/>
+                    }} label="Email" value={email} onChangeText={changeEmail} type="email" capitalize='none'  editable={true}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="Phone Nmber" value={phoneNumber} onChangeText={changePhoneNumber} type="tel" capitalize='none'/>
+                    }} label="Phone Nmber" value={phoneNumber} onChangeText={changePhoneNumber} type="tel" capitalize='none'  editable={true}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="UserName" value={userName} onChangeText={changeUserName} type="username" capitalize='none'/>
+                    }} label="UserName" value={userName} onChangeText={changeUserName} type="username" capitalize='none'  editable={true}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="Password" value={password} onChangeText={changePassword} type="password" capitalize='none'/>
+                    }} label="Password" value={password} onChangeText={changePassword} type="password" capitalize='none'  editable={true}/>
                     <TouchableOpacity style={styles.btn} onPress={registring}>
                         <Text style={[styles.large_txt, {color: '#fff',  marginTop: 10,}]}>Зарегистрируйтесь</Text>
                     </TouchableOpacity>
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
 
-        backgroundColor: width < 500 ? 'rgba(0, 0, 0, 1)' : '#fff',
+        backgroundColor: width < 500 ? 'rgba(0, 0, 0, 1)' : '#f2f2f2',
     },
     header: {
         width: '100%',
@@ -165,14 +165,17 @@ const styles = StyleSheet.create({
     },
     small_txt:{
         fontSize: 14,
-        fontFamily: 'InterLight',
+        lineHeight: 20,
+        letterSpacing: 0.25,
+        fontFamily: 'RobotoRegular', 
         marginBottom: 16,
         color: width < 500 ? '#fff' : '#000',
     },
     large_txt: {
         fontSize: 16,
-        letterSpacing: 0.5,
-        fontFamily: 'InterSemiBold',
+        lineHeight: 24,
+        letterSpacing: 0.15,
+        fontFamily: 'RobotoMedium',
         marginBottom: 16,
         textAlign: 'center',
         color: width < 500 ? '#fff' : '#000',

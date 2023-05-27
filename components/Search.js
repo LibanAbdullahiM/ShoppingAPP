@@ -55,9 +55,11 @@ const styles = StyleSheet.create({
         right: 0,
     },
     text: {
-        fontSize: 18,
+        fontSize: 16,
+        lineHeight: 24,
+        letterSpacing: 0.15,
+        fontFamily: 'RobotoMedium',
         color: '#fff',
-        fontFamily: 'InterMedium',
 
     },
     text_input: {

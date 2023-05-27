@@ -22,7 +22,7 @@ const Body = ({navigation, route}) => {
             <SmartTvScreen />
             <CustomerSupport />
             <NewProducts/>
-            <Featured navigation={navigation} route={route} />
+            {/* <Featured navigation={navigation} route={route} /> */}
             <View style={styles.section}>
                 {
                     NewProductsData2.map(item => {
@@ -43,7 +43,7 @@ const Body = ({navigation, route}) => {
                     })
                 }
             </View>
-            <Products products={LISTPRODUCTS} title="Our Products" navigation={navigation} route={route}/>
+            {/* <Products products={LISTPRODUCTS} title="Our Products" navigation={navigation} route={route}/> */}
         </ScrollView>
     )
 }
@@ -91,15 +91,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     small_txt:{
-        fontSize: 16,
-        fontWeight: '300',
-        fontFamily: 'InterLight', 
+        fontSize: 14,
+        lineHeight: 20,
+        letterSpacing: 0.25,
+        fontFamily: 'RobotoRegular', 
     },
     lasrge_txt: {
-        fontSize: 20,
-        fontWeight: '600',
-        letterSpacing: 0.2,
-        fontFamily: 'InterMedium',
+        fontSize: 16,
+        lineHeight: 24,
+        letterSpacing: 0.15,
+        fontFamily: 'RobotoMedium',
         marginTop: 8,
     },
     img: {

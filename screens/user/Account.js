@@ -15,44 +15,49 @@ LogBox.ignoreLogs([
 
 const tab = createNativeStackNavigator();
 
-function Account() {
+function Account({navigation, route}) {
 
-    const [isLogged, setIsLogged] = useState(false);
+    const {userdetails, isLogged} = route.params;
 
-    const getData = async () => {
+    const [_isLogged, set_IsLogged] = useState(isLogged);
+
+    const getUserData = async () => {
+
+        //setUserData({})
 
         try {
-            const userdetails = await AsyncStorage.getItem('UserDetails');
-            if(userdetails !== null){
-                setIsLogged(true);
-            }else {
-                setIsLogged(false);
+            const data = await AsyncStorage.getItem("UserDetails");
+            if(data !== null){
+                set_IsLogged(true)
             }
         } catch (error) {
-            console.log(error)
+            
         }
     }
 
     useEffect(() => {
-
-        getData();
-
-    }, [setIsLogged])
+        const unsubscribe = navigation.addListener('focus', () => {
+          // The screen is focused
+          getUserData();
+        });
+    
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+      }, [navigation]);
 
     return (
         <tab.Navigator>
             {
-                isLogged ?
+                _isLogged ?
                 <tab.Screen name="Profile" component={Profile} options={{
                     headerShown: false,
-                }} initialParams={{
-                    setIsLogged: setIsLogged
+                }}
+                initialParams={{
+                    _userdetails: userdetails,
                 }}/>
                 :
                 <tab.Screen name="Loging" component={Loging} options={{
                     headerShown: false,
-                }}  initialParams={{
-                    setIsLogged: setIsLogged
                 }}/>
               
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LogBox } from 'react-native';
+import * as Updates from 'expo-updates';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -12,35 +13,49 @@ const {width} = Dimensions.get("window");
 
 const Profile = ({navigation, route}) => {
 
-    const [userdetails, setUserDetails] = useState({});
+    const {_userdetails} = route.params;
 
-    const {setIsLogged} = route.params;
+    const [userData, setUserData] = useState(_userdetails); 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        getUserData()
+    //     getUserData()
 
-    }, [])
+    //  }, [userData])
+
+     useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+          // The screen is focused
+          getUserData();
+        });
+    
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+      }, [navigation, userData]);
 
     const getUserData = async () => {
+
+        //setUserData({})
 
         try {
             const data = await AsyncStorage.getItem("UserDetails");
             if(data !== null){
-                //console.log(data)
-                setUserDetails(JSON.parse(data));
+                setUserData(JSON.parse(data));
             }
         } catch (error) {
             
         }
     }
 
+    //console.log("USER DETAILS FROM PROFILE SCREEN: ", userData)
+
     const logout = async () => {
 
         try {
             await AsyncStorage.removeItem('UserDetails');
-            setIsLogged(false)
-            navigation.navigate("Account", {screen: 'Loging'});
+            Updates.reloadAsync();
+            //setIsLogged(false)
+           //navigation.navigate("Account", {screen: 'Loging'});
         } catch (error) {
             
         }
@@ -56,7 +71,7 @@ const Profile = ({navigation, route}) => {
                 <View style={styles.image_View}>
                     <Image style={styles.image} source={require("../../assets/icons/prifle-icon.png")}/>
                     <View>
-                        <Text style={styles.large_txt}>{userdetails.firstName}</Text>
+                        <Text style={styles.large_txt}>{userData?.firstName}</Text>
                         {/* <Text style={styles.large_txt}>{userdetails?.roles[0]?.role}</Text> */}
                     </View>
                 </View>
@@ -76,7 +91,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
 
-        backgroundColor: width < 500 ? 'rgba(0, 0, 0, 1)' : '#fff',
+        backgroundColor: width < 500 ? 'rgba(0, 0, 0, 1)' : '#f2f2f2',
     },
     header: {
         width: '100%',
@@ -99,14 +114,17 @@ const styles = StyleSheet.create({
     },
     small_txt:{
         fontSize: 14,
-        fontFamily: 'InterLight',
+        lineHeight: 20,
+        letterSpacing: 0.25,
+        fontFamily: 'RobotoRegular', 
         marginBottom: 16,
         color: width < 500 ? '#fff' : '#000',
     },
     large_txt: {
         fontSize: 16,
-        letterSpacing: 0.5,
-        fontFamily: 'InterSemiBold',
+        lineHeight: 24,
+        letterSpacing: 0.15,
+        fontFamily: 'RobotoMedium',
         marginBottom: 16,
         textAlign: 'center',
         color: width < 500 ? '#fff' : '#000',
@@ -141,9 +159,11 @@ const styles = StyleSheet.create({
         borderRadius: 16,
     },
     txt: {
-        fontSize: 18,
+        fontSize: 22,
+        lineHeight: 24,
+        letterSpacing: 0.15,
+        fontFamily: 'RobotoMedium', 
         color: '#0BB798',
-        fontFamily: 'InterSemiBold'
     },
     image_View: {
         width: 100,

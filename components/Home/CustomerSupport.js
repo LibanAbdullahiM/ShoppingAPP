@@ -50,14 +50,18 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     large_text: {
+        fontSize: 16,
+        lineHeight: 24,
+        letterSpacing: 0.15,
+        fontFamily: 'RobotoMedium',
         color: '#000000',
-        fontSize: 18,
-        fontFamily: 'InterMedium',
     },
     small_text: {
-        color: '#8A8A8A',
         fontSize: 14,
-        fontFamily: 'InterRegular',
+        lineHeight: 20,
+        letterSpacing: 0.25,
+        fontFamily: 'RobotoRegular', 
+        color: '#8A8A8A',
     },
     
     line: {

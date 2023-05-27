@@ -47,9 +47,11 @@ const styles = StyleSheet.create({
         borderRadius: 16,
     },
     txt: {
-        fontSize: 18,
+        fontSize: 22,
+        lineHeight: 28,
+        letterSpacing: 0,
+        fontFamily: 'RobotoMedium',
         color: '#0BB798',
-        fontFamily: 'InterSemiBold'
     }
 })
 

@@ -1,10 +1,11 @@
 import React from "react";
+import { useState } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from "react-native";
 
 
 const {width} = Dimensions.get("window");
 
-const Products = ({products, title, navigation, route}) => {
+const Products = ({products, title, categoryId, navigation, route}) => {
 
     return (
         <View style={styles.product_section}>
@@ -15,22 +16,22 @@ const Products = ({products, title, navigation, route}) => {
 
             <View style={styles.product_section_body}>
                 {
-                    products?.map((item, index) => {
+                    products?.map((product, index) => {
+
                         return (
-                            <TouchableOpacity key={index} style={{width: width < 500 ? '48%' : '33.3%', height: 360,}}
-                                            onPress={()=> navigation.navigate("Category", {screen: 'ProductDetails', params: {item: item}})}>
+                            <TouchableOpacity key={index} style={{width: width < 450 ? '48%' : '33.3%', height: 350,}}
+                                            onPress={()=> navigation.navigate("CategoryNativeStack", {screen: 'ProductDetails', params: {product: product,title: title, categoryId: categoryId}})}>
                                 <View style={[styles.column_product]}>
                                     <View style={styles.image_view}>
                                         <Image style={styles.image}
-                                                source={item.image}/>
+                                                source={{                                                                                                                                   
+                                                    uri: 'http://192.168.1.104:8080/api/v1/products/'+ product?.id +'/images/' + 0
+                                                }}/>
                                     </View>
                                     <View style={styles.product_info}>
-                                        <Text style={[styles.large_txt, {color: '#0BB798'}]}>${item.price}</Text>
-                                        <Text style={[styles.large_txt, {color: '#000',}]}>Brand</Text>
-                                        <Text style={[styles.small_txt]}>{item.name} {item.name} {item.name}</Text>
-                                        <TouchableOpacity style={[styles.btn, { marginTop: 8, }]}>
-                                                <Text style={[styles.large_txt, {color: '#FFF'}]}>В корзину</Text>
-                                        </TouchableOpacity>
+                                        <Text style={[styles.large_txt, {color: '#0BB798'}]}>${product?.price}</Text>
+                                        <Text style={[styles.large_txt, ]}>{product?.brand}</Text>
+                                        <Text style={[styles.small_txt]}>{product?.name.slice(0, 35)}...</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -82,20 +83,26 @@ const styles = StyleSheet.create({
         backgroundColor: '#0BB798'
     },
     title: {
-        fontSize: 20,
-        fontFamily: 'InterSemiBold',
+        fontSize: 22,
+        lineHeight: 28,
+        letterSpacing: 0,
+        fontFamily: 'RobotoMedium',
         color: width < 500 ? '#fff' : '#000',
         textAlign: 'center',
         marginLeft: 20,
     },
     small_txt:{
-        fontSize: 12,
-        fontFamily: 'InterLight',
+        fontSize: 14,
+        lineHeight: 20,
+        letterSpacing: 0.25,
+        fontFamily: 'RobotoRegular', 
         color: width < 500 ? '#fff' : '#000',
     },
     large_txt: {
         fontSize: 16,
-        fontFamily: 'InterMedium',
+        lineHeight: 24,
+        letterSpacing: 0.15,
+        fontFamily: 'RobotoMedium',
         color: width < 500 ? '#fff' : '#000',
     },
     product_section_body: {
@@ -119,19 +126,19 @@ const styles = StyleSheet.create({
 
     },
     image_view: {
-        width: '100%',
-        height: '48%',
+        width: '99.3%',
+        height: '60%',
         alignItems: 'center',
 
     },
     image: {
         width: '100%',
         height: '100%',
-        resizeMode: 'contain'
+        resizeMode: 'cover'
     },
     product_info:  {
         width: '100%',
-        height: '52%',
+        height: '40%',
         flexDirection: 'column',
         justifyContent: 'center',
         paddingLeft: 10,
