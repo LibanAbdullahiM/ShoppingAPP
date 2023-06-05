@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import { View, StyleSheet, Dimensions } from "react-native";
 import Header from "../../components/Header";
 import Body from "../../components/Home/Body";
@@ -9,7 +10,7 @@ const Home = ({navigation, route}) => {
 
     return (
         <View style={styles.container}>
-            <Header/>
+            <Header navigation={navigation} route={route}/>
             <Body navigation={navigation} route={route}/>
         </View>
     )

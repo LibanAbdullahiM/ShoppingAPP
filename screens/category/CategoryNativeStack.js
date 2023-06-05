@@ -4,6 +4,7 @@ import {StyleSheet, Dimensions } from 'react-native';
 import ListCategories from './ListCategories';
 import ListProducts from '../products/ListProducts';
 import ProductDetails from '../products/ProductDetails';
+import SearchScreen from '../products/SearchScreen';
 
 const tab = createNativeStackNavigator();
 
@@ -21,6 +22,9 @@ const CategoryNativeStack = ({navigation, route}) => {
             headerShown: false,
         }} />
            <tab.Screen name="ProductDetails" component={ProductDetails} options={{
+            headerShown: false,
+        }}/>
+            <tab.Screen name="SearchScreen" component={SearchScreen} options={{
             headerShown: false,
         }}/>
         </tab.Navigator>

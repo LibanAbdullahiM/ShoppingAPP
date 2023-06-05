@@ -71,7 +71,7 @@ const ListCategories = ({navigation, route}) => {
 
     return (
         <View style={styles.container}>
-            <Header/>
+            <Header navigation={navigation} route={route}/>
             <ScrollView style={styles.scrollview} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',

@@ -1,26 +1,36 @@
 import React, { useState, useEffect } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, Dimensions, Image, ScrollView, TouchableOpacity, RefreshControl, ActivityIndicator } from "react-native";
 import Header from '../../components/Header'
-import { LISTPRODUCTS } from "../../constants/Data";
 import Products from "../../components/Home/Products";
 
 const {width} = Dimensions.get("window");
 
-const ListProducts = ({navigation, route}) => {
+const SearchScreen = ({navigation, route}) => {
 
     const [listProducts, setListProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const {title, categoryId} = route.params;
+    const {str} = route?.params;
+
+    console.log("FIND PRODUCTS WITHE NAME: "+ str);
 
     const getProductsFromAPI = async () =>{
 
+        setLoading(true);
+        setListProducts([]);
+        setError();
+
         try {
             
-            const response = await fetch('http://192.168.1.104:8080/api/v1/categories/' + categoryId + '/products');
+            const response = await fetch('http://192.168.1.104:8080/api/v1/products/find', {
+                method: "POST",
+                body: str,
+            });
             if(response.ok){
                 const data = await response.json();
+                console.log("PRODUCTS FOUNDED: ", data);
                 setListProducts(data);
                 setLoading(false);
             }
@@ -31,11 +41,21 @@ const ListProducts = ({navigation, route}) => {
         }
     }
 
-    useEffect(() => {
+    useFocusEffect(
 
-        getProductsFromAPI();
-        
-    }, [0]);
+        React.useCallback(() => {
+
+            getProductsFromAPI();
+            console.log("THE SEARCH SCREEN WAS FOCUSED!")
+           
+
+            return () => {
+                // Do something when the screen is unfocused
+                   console.log("THE SEARCH SCREEN WAS UNFOCUSED!")
+                 };
+
+        }, [navigation])
+      );
 
     if (loading) {
         return (
@@ -67,7 +87,7 @@ const ListProducts = ({navigation, route}) => {
             <RefreshControl refreshing={false}/>
         }
         showsVerticalScrollIndicator={false}>
-                <Products products={listProducts} title={title} navigation={navigation} route={route}/>
+                <Products products={listProducts} title="" navigation={navigation} route={route}/>
             </ScrollView>
         </View>
     )
@@ -104,4 +124,4 @@ const styles = StyleSheet.create({
         color: width < 450 ? '#fff' : '#000',
     },
 })
-export default ListProducts;
+export default SearchScreen;

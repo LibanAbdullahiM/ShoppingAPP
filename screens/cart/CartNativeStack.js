@@ -12,7 +12,7 @@ const {width} = Dimensions.get("window");
 
 const CartNativeStack = ({navigation, route}) => {
 
-    const {userdetails} = route.params;
+    const {userdetails, setBadgeCount} = route.params;
 
     return (
         <tab.Navigator initialRouteName='ShoppingCart'>

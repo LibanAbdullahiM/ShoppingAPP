@@ -1,14 +1,18 @@
 import React from "react";
+import { useState } from "react";
 import { View, Text, StyleSheet, TouchableHighlight, Image, TouchableOpacity, TextInput } from "react-native";
 
-const Search = () => {
+const Search = ({navigation}) => {
+
+    const [find, changeFind] = useState('');
+
     return (
         <View style={styles.search_form}>
             <View style={styles.input_group}>
                 <Image style={styles.icon} source={require("../assets/icons/search_icon.png")}/>
-                <TextInput style={styles.text_input} placeholder='Type Here...'/>
+                <TextInput style={styles.text_input} placeholder='Type Here...' value={find} onChangeText={changeFind}/>
             </View>
-           <TouchableOpacity style={styles.btn}>
+           <TouchableOpacity style={styles.btn}  onPress={() => navigation.navigate("CategoryNativeStack", {screen: 'SearchScreen', params: {str: find}})}>
                 <Text style={styles.text}>Search</Text>
            </TouchableOpacity>
         </View>

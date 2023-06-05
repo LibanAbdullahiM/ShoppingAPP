@@ -4,12 +4,13 @@ import Search from "./Search";
 
 const {width} = Dimensions.get('window');
 
-const Header = () => {
+const Header = ({navigation, route}) => {
+
     return (
         <View style={styles.container}>
             <View style={styles.statusBar}>
             </View>
-            <Search />
+            <Search navigation={navigation} route={route}/>
         </View>
     )
 }

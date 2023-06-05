@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl, Image, TouchableOpacity, Dimensions, Pressable, Modal } from 'react-native';
 import { useState, useRef, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from '@react-navigation/native';
 import Header from '../../components/Header';
 import { LISTPRODUCTS } from '../../constants/Data';
 import Products from '../../components/Home/Products';
@@ -13,8 +14,6 @@ const height = width * 0.6;
 
 const ProductDetails = ({navigation, route}) => {
 
-    
-
     const [modalVisible, setModalVisible] = useState(false);
 
     const [active, setActive] = useState(0);
@@ -23,7 +22,7 @@ const ProductDetails = ({navigation, route}) => {
     const [loadMore, setLoadMore] = useState(false);
     const [userdetails, setUserdetails] = useState({});
 
-    const {product, title, categoryId} = route.params;
+    const {product, title} = route.params;
 
     const userName = userdetails.userName;
     const password = userdetails.password;
@@ -37,10 +36,12 @@ const ProductDetails = ({navigation, route}) => {
 
         try {
             
+           
+
             const response = await fetch('http://192.168.1.104:8080/api/v1/products/' + product?.id + '/images');
             if(response.ok){
                 const data = await response.json();
-               
+                console.log("Images size: " + data);
                 for(let i = 0; i < data; i++){
                     setImageIndexes(oldArray => [...oldArray, i])
                 }
@@ -65,14 +66,26 @@ const ProductDetails = ({navigation, route}) => {
         }
     }
 
+
+
     
+    useFocusEffect(
 
-    useEffect(() => {
+        React.useCallback(() => {
 
-        getData();
-        getProductImages();
-        
-    }, [0]);
+            getData();
+            getProductImages();
+            console.log("THE PRODUCT DETAILS SCREEN WAS FOCUSED!")
+
+            return () => {
+                // Do something when the screen is unfocused
+                   console.log("THE PRODUCT DETAILS SCREEN WAS UNFOCUSED!")
+                 };
+
+        }, [navigation])
+      );
+
+      console.log(imageIndexes);
 
     scrollRef.current?.scrollTo({
         y: 0,
@@ -120,7 +133,7 @@ const ProductDetails = ({navigation, route}) => {
             <View style={styles.header}>
                 <View style={styles.statusBar}></View>
                 <View style={{width: '100%', height: 30, flexDirection: 'row', alignItems: 'center',}}>
-                    <TouchableOpacity style={styles.back_button} onPress={() => navigation.navigate("ListProducts", {title: title, categoryId: categoryId})}>
+                    <TouchableOpacity style={styles.back_button} onPress={() => navigation.goBack()}>
                     <Image style={styles.back_Icon} source={width < 450 ? require("../../assets/icons/back-white.png") : require("../../assets/icons/back.png")}/>
                     </TouchableOpacity>
                     <Text style={[styles.large_txt, {marginLeft: 10,}]}>{product?.name.slice(0, 35)} .........</Text>
@@ -148,6 +161,7 @@ const ProductDetails = ({navigation, route}) => {
                 }}>
                     {
                         imageIndexes.map(i => {
+                            console.log("PRODUCT ID: " + product.id);
                             return  <Image key={i} style={styles.imge}  source={{                                                                                                                                   
                                 uri: 'http://192.168.1.104:8080/api/v1/products/'+ product?.id +'/images/' + i
                             }}/>

@@ -5,7 +5,7 @@ import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from "rea
 
 const {width} = Dimensions.get("window");
 
-const Products = ({products, title, categoryId, navigation, route}) => {
+const Products = ({products, title, navigation, route}) => {
 
     return (
         <View style={styles.product_section}>
@@ -20,7 +20,7 @@ const Products = ({products, title, categoryId, navigation, route}) => {
 
                         return (
                             <TouchableOpacity key={index} style={{width: width < 450 ? '48%' : '33.3%', height: 350,}}
-                                            onPress={()=> navigation.navigate("CategoryNativeStack", {screen: 'ProductDetails', params: {product: product,title: title, categoryId: categoryId}})}>
+                                            onPress={()=> navigation.navigate("CategoryNativeStack", {screen: 'ProductDetails', params: {product: product,title: title}})}>
                                 <View style={[styles.column_product]}>
                                     <View style={styles.image_view}>
                                         <Image style={styles.image}

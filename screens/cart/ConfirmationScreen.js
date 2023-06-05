@@ -42,7 +42,7 @@ const ConfirmationScreen = ({navigation, route}) => {
                 let headers = new Headers();
                 headers.append("Authorization", "Basic " + base64.encode(userName+":"+password));
 
-                const response = await fetch('http://192.168.1.104:8080/api/v1/orders',{
+                const response = await fetch('http://192.168.1.104:8080/api/v1/orders/save',{
                     method: "POST",
                     headers: {
                         Accept: 'application/json',

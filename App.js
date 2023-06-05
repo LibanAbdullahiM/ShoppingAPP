@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -9,7 +10,6 @@ import CategoryNativeStack from './screens/category/CategoryNativeStack';
 import Account from './screens/user/Account';
 import ShoppingCart from './screens/cart/ShoppingCart';
 import CartNativeStack from './screens/cart/CartNativeStack';
-import { useState, useEffect } from 'react';
 import { LogBox } from 'react-native';
 
 LogBox.ignoreLogs([
@@ -20,7 +20,7 @@ const {width} = Dimensions.get("window");
 
 const Tap = createBottomTabNavigator();
 
-export default function App({navigation, route}) {
+export default function App() {
 
   const [badgeCount, setBadgeCount] = useState(0);
   const [userdetails, setUserdetails] = useState({});
@@ -100,6 +100,7 @@ export default function App({navigation, route}) {
         }}}
         initialParams={{
           userdetails: userdetails,
+          setBadgeCount: setBadgeCount,
         }}/>
         <Tap.Screen name='Account' component={Account} options={{tabBarIcon: ({focused, size, color}) => {
           return (

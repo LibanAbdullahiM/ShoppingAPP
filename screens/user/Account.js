@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,6 +9,8 @@ import Loging from './Loging';
 import Profile from './Profile';
 import Registring from './Registring';
 import { LogBox } from 'react-native';
+import Help from './Help';
+import AdminNativeStack from './admin/AdminNativeStack';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -20,30 +23,47 @@ function Account({navigation, route}) {
     const {userdetails, isLogged} = route.params;
 
     const [_isLogged, set_IsLogged] = useState(isLogged);
+    const [userData, setUserData] = useState(userdetails === null ? {} : userdetails)
 
     const getUserData = async () => {
-
-        //setUserData({})
 
         try {
             const data = await AsyncStorage.getItem("UserDetails");
             if(data !== null){
-                set_IsLogged(true)
+                setUserData(JSON.stringify(data));
+                set_IsLogged(true);
             }
         } catch (error) {
             
         }
     }
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-          // The screen is focused
-          getUserData();
-        });
+    useFocusEffect(
+
+        React.useCallback(() => {
+
+            getUserData();
+
+            console.log("THE PROFILE SCREEN WAS FOCUSED!")
+           
+
+            return () => {
+                // Do something when the screen is unfocused
+                   console.log("THE PROFILE SCREEN WAS UNFOCUSED!")
+                 };
+
+        }, [navigation])
+      );
+
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //       // The screen is focused
+    //       getUserData();
+    //     });
     
-        // Return the function to unsubscribe from the event so it gets removed on unmount
-        return unsubscribe;
-      }, [navigation]);
+    //     // Return the function to unsubscribe from the event so it gets removed on unmount
+    //     return unsubscribe;
+    //   }, [navigation]);
 
     return (
         <tab.Navigator>
@@ -53,7 +73,7 @@ function Account({navigation, route}) {
                     headerShown: false,
                 }}
                 initialParams={{
-                    _userdetails: userdetails,
+                    _userdetails: userData,
                 }}/>
                 :
                 <tab.Screen name="Loging" component={Loging} options={{
@@ -63,8 +83,14 @@ function Account({navigation, route}) {
 
             }
                <tab.Screen name="Registring" component={Registring} options={{
-            headerShown: false,
-        }}/>
+                headerShown: false,
+            }}/>
+             <tab.Screen name="Help" component={Help} options={{
+                headerShown: false,
+            }}/>
+              <tab.Screen name="AdminNativeStack" component={AdminNativeStack} options={{
+                headerShown: false,
+            }}/>
         </tab.Navigator>
     )
 }
