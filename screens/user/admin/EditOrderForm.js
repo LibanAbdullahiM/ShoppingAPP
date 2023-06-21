@@ -3,41 +3,62 @@ import {View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, ScrollV
 import { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import Input from '../../../components/Input';
+import SelectDropdown from 'react-native-select-dropdown';
+
+const base64 = require('base-64');
 
 const {width} = Dimensions.get("window");
 
-const EditOrderForm = ({navigation}) => {
+const orderStatus = ["NEW", "SHIPPED", "DELIVERED", "CLOSE"]
 
-    const [firstName, changeFirstName] = useState('');
-    const [lastName, changeLastName] = useState('');
-    const [email, changeEmail] = useState('');
-    const [phoneNumber, changePhoneNumber] = useState('');
-    const [userName, changeUserName] = useState('');
-    const [password, changePassword] = useState('');
+const EditOrderForm = ({navigation, route}) => {
 
-    const registring = async () => {
+    const {order, userData} = route.params;
+
+    const [OrderNumber, changeOrderNumber] = useState(order.orderNumber);
+    const [DateOrdered, changeDateOrdered] = useState(order.dateOrdered);
+    const [quantities, changeQuantities] = useState(order.orderNumber);
+    const [price, changeTotalPrice] = useState(order.totalPrice);
+    const [orderStatus, changeOrderStatus] = useState(order.orderStatus);
+
+    const userName = userData.userName;
+    const password = userData.password;
+
+    let headers = new Headers();
+    headers.append("Authorization", "Basic " + base64.encode(userName+":"+password));
+
+    const changeStatus = async (orderId) => {
 
         try {
+            // const response = await fetch('http://172.20.10.12:8080/api/v1/register', {
+            //     method: 'POST',
+            //     headers: {
+            //         Accept: 'application/json',
+            //         'Content-Type': 'application/json',
+            //         },
+            //         body: JSON.stringify({
+            //             firstName: firstName,
+            //             lastName: lastName,
+            //             email: email,
+            //             phoneNumber: phoneNumber,
+            //             userName: userName,
+            //             password: password,
+            //         }),
+            // })
 
-            const response = await fetch('http://192.168.1.104:8080/api/v1/register', {
-                method: 'POST',
+            const response = await fetch('http://192.168.1.104:8080/api/v1/orders/' + orderId + '/change-status', {
+                method: 'PUT',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
+                    Authorization: "Basic " + base64.encode(userName+":"+password)
                     },
-                    body: JSON.stringify({
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: email,
-                        phoneNumber: phoneNumber,
-                        userName: userName,
-                        password: password,
-                    }),
+                    body: orderStatus,
             })
             if(response.ok){
                 const data = await response.json();
-                navigation.navigate("Loging")
-                console.log("You have registred successfully!");
+                navigation.navigate("OrdersTableScreen", {userData: userData})
+                alert("Order Status of the Order " + orderId + " Changed")
             }else{
                 ToastAndroid.showWithGravityAndOffset("The User name already exist. please use another one!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
             }
@@ -63,43 +84,40 @@ const EditOrderForm = ({navigation}) => {
                     justifyContent: 'center',
                     alignItems: 'center',
            }}>
+
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cross_icon}>
-                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/cross-symbol-white.png") : require("../../../assets/icons/cross-symbol.png")}/>
+                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/back-white.png") : require("../../../assets/icons/back.png")}/>
                 </TouchableOpacity>
+
                 <View style={styles.card}>
-                    <Text style={styles.large_txt}>Создай Новый аккунт</Text>
+                    <Text style={styles.large_txt}>изменить статус заказа</Text>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="FirstName" value={firstName} onChangeText={changeFirstName} type="name" capitalize='sentences'  editable={true}/>
+                    }} label="OrderNumber" value={OrderNumber} onChangeText={changeOrderNumber} type="off" capitalize='none'  editable={false}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="LastName" value={lastName} onChangeText={changeLastName} type="name" capitalize='sentences'  editable={true}/>
+                    }} label="Date Ordered" value={DateOrdered} onChangeText={changeDateOrdered} type="off" capitalize='none'  editable={false}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="Email" value={email} onChangeText={changeEmail} type="email" capitalize='none'  editable={true}/>
+                    }} label="Quantities" value={`${quantities}`} onChangeText={changeQuantities} type="off" capitalize='none'  editable={false}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="Phone Nmber" value={phoneNumber} onChangeText={changePhoneNumber} type="tel" capitalize='none'  editable={true}/>
+                    }} label="TotalPrice" value={`${price}`} onChangeText={changeTotalPrice} type="off" capitalize='none' editable={false}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="UserName" value={userName} onChangeText={changeUserName} type="username" capitalize='none'  editable={true}/>
-                    <Input styles={{
-                        form_row: styles.form_row,
-                        input: styles.input,
-                        large_txt: styles.large_txt
-                    }} label="Password" value={password} onChangeText={changePassword} type="password" capitalize='none'  editable={true}/>
-                    <TouchableOpacity style={styles.btn} onPress={registring}>
-                        <Text style={[styles.large_txt, {color: '#fff',  marginTop: 10,}]}>Зарегистрируйтесь</Text>
+                    }} label="Order Status" value={orderStatus} onChangeText={changeOrderStatus} type="off" capitalize='word' editable={true}/>
+                    <TouchableOpacity style={styles.btn} onPress={() => changeStatus(order?.id)}>
+                        <Text style={[styles.large_txt, {color: '#fff',  marginTop: 10,}]}>Сохрани</Text>
                     </TouchableOpacity>
                 </View>  
            </ScrollView>
@@ -185,7 +203,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 4,
         marginLeft: 10,
-        borderColor: width < 500 ? "#347" : '#000',
+        borderColor: width < 500 ? "#347" : 'rgba(0, 0, 0, 0.1)',
         color: '#000',
         padding: 8,
         backgroundColor: '#fff'

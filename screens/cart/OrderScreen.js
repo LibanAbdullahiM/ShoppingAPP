@@ -47,16 +47,17 @@ const OrderScreen = ({navigation, route}) => {
 
     const confimrOrder = () => {
 
-        if(!firstName)  ToastAndroid.showWithGravityAndOffset("First name is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!lastName)  ToastAndroid.showWithGravityAndOffset("Last name is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!email)  ToastAndroid.showWithGravityAndOffset("Email is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!email.match(regex))  ToastAndroid.showWithGravityAndOffset("Invalid Email", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!address)  ToastAndroid.showWithGravityAndOffset("Username is required", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!city)  ToastAndroid.showWithGravityAndOffset("The password must be at least 8 characters", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-
+        if(!firstName)  ToastAndroid.showWithGravityAndOffset("First name is required!", ToastAndroid.LONG, ToastAndroid.BOTTOM, 10,100);
+        else if (!lastName)  ToastAndroid.showWithGravityAndOffset("Last name is required!", ToastAndroid.LONG, ToastAndroid.BOTTOM, 10,100);
+        else if (!email)  ToastAndroid.showWithGravityAndOffset("Email is required!", ToastAndroid.LONG, ToastAndroid.BOTTOM, 10,100);
+        else if (!email.match(regex))  ToastAndroid.showWithGravityAndOffset("Invalid Email", ToastAndroid.LONG, ToastAndroid.BOTTOM, 10,100);
+        else if (!address)  ToastAndroid.showWithGravityAndOffset("Addres is required", ToastAndroid.LONG, ToastAndroid.BOTTOM, 10,100);
+        else if (!city)  ToastAndroid.showWithGravityAndOffset("TCity is required", ToastAndroid.LONG, ToastAndroid.BOTTOM, 10,100);
+        else if (!zipcode)  ToastAndroid.showWithGravityAndOffset("Zipcode is required", ToastAndroid.LONG, ToastAndroid.BOTTOM, 10,100);
+      
         else {
 
-            const orderDetails = {
+            const customerDetails = {
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
@@ -68,7 +69,7 @@ const OrderScreen = ({navigation, route}) => {
             }
 
             if (orderDetails !== null){
-                navigation.navigate("ConfirmationScreen", {totalPrice: totalPrice, totalQuantity: totalQuantity, userdetails: userdetails, orderDetails: orderDetails, listCarts: listCarts})
+                navigation.navigate("ConfirmationScreen", {totalPrice: totalPrice, totalQuantity: totalQuantity, userdetails: userdetails, customerDetails: customerDetails, listCarts: listCarts})
             }
         }
     }
@@ -184,7 +185,7 @@ const OrderScreen = ({navigation, route}) => {
                 </View>
                <View style={{marginBottom: '20%', width: '100%', justifyContent: 'center', alignItems: 'center', padding: 8,}}>
                 <TouchableOpacity style={styles.btn} onPress={() => confimrOrder()}>
-                                <Text style={[styles.large_txt, {color: '#fff'}]}>Подтвердите и завершите</Text>
+                                <Text style={[styles.large_txt, {color: '#fff'}]}>Подтверждение</Text>
                 </TouchableOpacity>
                </View>
             </ScrollView>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator, RefreshControl } from "react-native";
 import Header from '../../components/Header'
 
 const {width} = Dimensions.get("window");
@@ -11,6 +11,7 @@ const ListCategories = ({navigation, route}) => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [Refreshing, setRefreshing] = useState(false);
 
     const getCategoriesFromApi = async () => {
 
@@ -19,10 +20,12 @@ const ListCategories = ({navigation, route}) => {
         setError(null);
 
         try {
+            //const response = await fetch('http://172.20.10.12:8080/api/v1/categories');
             const response = await fetch('http://192.168.1.104:8080/api/v1/categories');
             if(response.ok){
                 const data = await response.json();
                 setCategories(data);
+                setRefreshing(false);
                 console.log("Categories are Loaded........................!")
                 setLoading(false);
                 //console.log(data);
@@ -39,9 +42,15 @@ const ListCategories = ({navigation, route}) => {
         
     }, [0]);
 
+    const handleRefresh = () => {
+        setRefreshing(true);
+        getCategoriesFromApi();
+    }
+
     if (loading) {
         return (
             <View style={styles.container}>
+                 <Header navigation={navigation} route={route}/>
                 <Text style={styles.txt}>Загрузка...</Text>
                 <ActivityIndicator size={'large'}/>
             </View>
@@ -61,7 +70,8 @@ const ListCategories = ({navigation, route}) => {
         <View style={styles.category} key={data.id}>
             <TouchableOpacity style={styles.image_view} onPress={() => navigation.navigate("ListProducts", {title:data.name, categoryId:data.id})}>
                         <Image style={styles.img} source={{
-                            uri: 'http://192.168.1.104:8080/api/v1/categories/'+data.id+'/image'
+                            uri: 'http://192.168.1.104:8080/api/v1/categories/'+ data.id +'/image'
+                            //uri: 'http://172.20.10.12:8080/api/v1/categories/'+data.id+'/image'
                         }}/>
             </TouchableOpacity>
             <Text style={styles.txt}>{data.name}</Text>
@@ -75,7 +85,11 @@ const ListCategories = ({navigation, route}) => {
             <ScrollView style={styles.scrollview} contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
-            }} showsVerticalScrollIndicator={false}>
+            }} showsVerticalScrollIndicator={false}
+            refreshControl={
+                <RefreshControl refreshing={Refreshing}
+                                onRefresh={handleRefresh}/>
+            }>
                 <View style={styles.section}>
                     {
                         categories.map(data => _renderItem(data))
@@ -90,8 +104,6 @@ const ListCategories = ({navigation, route}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
 
         backgroundColor: width < 450 ? 'rgba(0, 0, 0, 1)' : '#fff',
     },

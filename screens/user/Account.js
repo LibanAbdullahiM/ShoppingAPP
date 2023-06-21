@@ -44,12 +44,12 @@ function Account({navigation, route}) {
 
             getUserData();
 
-            console.log("THE PROFILE SCREEN WAS FOCUSED!")
+            console.log("THE ACCOUNT SCREEN WAS FOCUSED!")
            
 
             return () => {
                 // Do something when the screen is unfocused
-                   console.log("THE PROFILE SCREEN WAS UNFOCUSED!")
+                   console.log("THE ACCOUNT SCREEN WAS UNFOCUSED!")
                  };
 
         }, [navigation])
@@ -66,8 +66,35 @@ function Account({navigation, route}) {
     //   }, [navigation]);
 
     return (
-        <tab.Navigator>
-            {
+        <tab.Navigator initialRouteName='Loging'>
+             <tab.Screen name="Loging" component={Loging} options={{
+                    headerShown: false,
+                }}/>
+            <tab.Screen name="Profile" component={Profile} options={{
+                    headerShown: false,
+                }}
+                initialParams={{
+                    _userdetails: userData,
+                }}/>
+            
+            <tab.Screen name="Registring" component={Registring} options={{
+                headerShown: false,
+            }}/>
+             <tab.Screen name="Help" component={Help} options={{
+                headerShown: false,
+            }}/>
+              <tab.Screen name="AdminNativeStack" component={AdminNativeStack} options={{
+                headerShown: false,
+            }}/>
+        </tab.Navigator>
+    )
+}
+
+export default Account;
+
+/**
+ * 
+ *             {
                 _isLogged ?
                 <tab.Screen name="Profile" component={Profile} options={{
                     headerShown: false,
@@ -91,8 +118,4 @@ function Account({navigation, route}) {
               <tab.Screen name="AdminNativeStack" component={AdminNativeStack} options={{
                 headerShown: false,
             }}/>
-        </tab.Navigator>
-    )
-}
-
-export default Account;
+ */

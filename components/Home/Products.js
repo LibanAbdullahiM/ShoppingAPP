@@ -7,6 +7,13 @@ const {width} = Dimensions.get("window");
 
 const Products = ({products, title, navigation, route}) => {
 
+    const navigateToProductDetails = (product) => {
+
+        navigation.navigate("CategoryNativeStack",
+                                {screen: 'ProductDetails',
+                                params: {product: product,title: title, PRODUCTS: products}})
+    }
+
     return (
         <View style={styles.product_section}>
 
@@ -20,12 +27,13 @@ const Products = ({products, title, navigation, route}) => {
 
                         return (
                             <TouchableOpacity key={index} style={{width: width < 450 ? '48%' : '33.3%', height: 350,}}
-                                            onPress={()=> navigation.navigate("CategoryNativeStack", {screen: 'ProductDetails', params: {product: product,title: title}})}>
+                                            onPress={()=> navigateToProductDetails(product)}>
                                 <View style={[styles.column_product]}>
                                     <View style={styles.image_view}>
                                         <Image style={styles.image}
                                                 source={{                                                                                                                                   
                                                     uri: 'http://192.168.1.104:8080/api/v1/products/'+ product?.id +'/images/' + 0
+                                                    //uri: 'http://172.20.10.12:8080/api/v1/products/'+ product?.id +'/images/' + 0
                                                 }}/>
                                     </View>
                                     <View style={styles.product_info}>

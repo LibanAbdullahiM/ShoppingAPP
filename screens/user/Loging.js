@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Pressable, Image, ToastAndroid} from 'react-native';
 import { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Input from '../../components/Input';
 import { LogBox } from 'react-native';
@@ -18,6 +19,7 @@ const Loging = ({navigation, route}) => {
 
     const [userName, changeUserName] = useState('');
     const [password, changePassword] = useState('');
+    const [userData, setUserData] = useState({});
     
     let headers = new Headers();
     headers.append("Authorization", "Basic " + base64.encode(userName+":"+password));
@@ -30,6 +32,10 @@ const Loging = ({navigation, route}) => {
         else {
 
             try {
+                // const response = await fetch('http://172.20.10.12:8080/api/v1/login', {
+                //     method: 'POST',
+                //     headers: headers,
+                // })
 
                 const response = await fetch('http://192.168.1.104:8080/api/v1/login', {
                     method: 'POST',
@@ -45,8 +51,8 @@ const Loging = ({navigation, route}) => {
 
                     await AsyncStorage.setItem('UserDetails', JSON.stringify(newData));
                     //setIsLogged(true);
-                    Updates.reloadAsync();
-                    //navigation.navigate("Account", {screen: 'Profile'});
+                    //Updates.reloadAsync();
+                    navigation.navigate("Account", {screen: "Profile", params: {_userdetails: newData}});
                     console.log("You have Logged!");
 
                 }else{
@@ -59,6 +65,37 @@ const Loging = ({navigation, route}) => {
         }
 
     }
+
+    const getUserData = async () => {
+
+        try {
+            const data = await AsyncStorage.getItem("UserDetails");
+            if(data !== null){
+                console.log(data);
+                setUserData(JSON.stringify(data));
+                navigation.navigate("Account", {screen: "Profile", params: {_userdetails: userData}});
+            }
+        } catch (error) {
+            
+        }
+    }
+
+    useFocusEffect(
+
+        React.useCallback(() => {
+
+            getUserData();
+
+            console.log("THE LOGING SCREEN WAS FOCUSED!")
+           
+
+            return () => {
+                // Do something when the screen is unfocused
+                   console.log("THE LOGING SCREEN WAS UNFOCUSED!")
+                 };
+
+        }, [navigation])
+      );
 
     return (
         <View style={styles.container}>

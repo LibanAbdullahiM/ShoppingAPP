@@ -5,6 +5,8 @@ import ShoppingCart from './ShoppingCart';
 import OrderScreen from './OrderScreen';
 import ConfirmationScreen from './ConfirmationScreen';
 import CompleteScreen from './CompleteScreen';
+import MyOrders from './MyOrders';
+import OrderDetailsScreen from './OrderDetailsScreen';
 
 const tab = createNativeStackNavigator();
 
@@ -36,6 +38,12 @@ const CartNativeStack = ({navigation, route}) => {
             userdetails: userdetails,
         }}/>
         <tab.Screen name="CompleteScreen" component={CompleteScreen} options={{
+            headerShown: false,
+        }}/>
+        <tab.Screen name="MyOrders" component={MyOrders} options={{
+            headerShown: false,
+        }}/>
+        <tab.Screen name="OrderDetailsScreen" component={OrderDetailsScreen} options={{
             headerShown: false,
         }}/>
         </tab.Navigator>

@@ -4,7 +4,7 @@ import Input from "../../components/Input";
 
 const {width} = Dimensions.get("window");
 
-const OrderDetails = ({orderDetails}) => {
+const CustomerDetails = ({customerDetails}) => {
     
     return (
 
@@ -12,20 +12,20 @@ const OrderDetails = ({orderDetails}) => {
 
         <View style={{width: '90%', justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'row', marginLeft: 8,}}>
             <Text style={[styles.large_txt, {fontFamily: 'RobotoBold', fontSize: 22, lineHeight: 28, letterSpacing: 0, textAlign: 'left'}]}>
-                Доставка в Адрес
+                Доставка в Адресе
             </Text>
         </View>
         <View style={{width: '90%', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', marginLeft: 8,}}>
-            <Text style={styles.small_txt}>{orderDetails?.country}, {orderDetails?.city}, улица {orderDetails?.address}</Text>
+            <Text style={styles.small_txt}>{customerDetails?.country}, {customerDetails?.city}, улица {customerDetails?.address}</Text>
         </View>
 
         <View style={{width: '90%', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', marginLeft: 8,  marginTop: 32,}}>
             <Text style={[styles.large_txt, {fontFamily: 'RobotoBold', fontSize: 22, lineHeight: 28, letterSpacing: 0, textAlign: 'left'}]}>Получатель</Text>
         </View>
         <View style={{width: '90%', justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'column', marginLeft: 8,}}>
-            <Text style={styles.small_txt}>{orderDetails?.firstName + orderDetails?.lastName}</Text>
-            <Text style={styles.small_txt}>{orderDetails?.phoneNumber}</Text>
-            <Text style={styles.small_txt}>{orderDetails?.email}</Text>
+            <Text style={styles.small_txt}>{customerDetails?.firstName + ' ' + customerDetails?.lastName}</Text>
+            <Text style={styles.small_txt}>{customerDetails?.phoneNumber}</Text>
+            <Text style={styles.small_txt}>{customerDetails?.email}</Text>
         </View>
 
     </View>
@@ -133,4 +133,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default OrderDetails;
+export default CustomerDetails;

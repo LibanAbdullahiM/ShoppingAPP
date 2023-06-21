@@ -2,40 +2,49 @@ import React, { useEffect, useState } from "react";
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView } from "react-native";
 
+const base64 = require('base-64');
+
 const {width} = Dimensions.get("window");
 
 const ProductsTableScreen = ({navigation, route}) => {
 
     const [products, setProducts] = useState([]);
-    const [userData, setUserData] = useState({}); 
 
-    const {categoryId} = route.params;
+    const {categoryId, userData} = route.params;
 
-    const getUserData = async () => {
+    const userName = userData.userName;
+    const password = userData.password;
 
-        try {
-            const data = await AsyncStorage.getItem("UserDetails");
-            if(data !== null){
-                console.log("USER DETAILS FROM SHOPPINGCART SCREEN: ", data)
-                setUserData(JSON.parse(data));
-            }
-        } catch (error) {
-            
-        }
-    }
+    let headers = new Headers();
+    headers.append("Authorization", "Basic " + base64.encode(userName+":"+password));
+
 
     const getProductsFromApi = async () => {
 
         setProducts([]);
 
         try {
+           // const response = await fetch('http://172.20.10.12:8080/api/v1/categories/' + categoryId + '/products');
             const response = await fetch('http://192.168.1.104:8080/api/v1/categories/' + categoryId + '/products');
             if(response.ok){
                 const data = await response.json();
                 setProducts(data);
-                console.log("Categories are Loaded........................!")
+                console.log("Products are Loaded........................!")
                 //console.log(data);
             }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const deleteProduct = async (productId) => {
+        try {
+            await fetch('http://192.168.1.104:8080/api/v1/products/' + productId,{
+                method: 'DELETE',
+                headers: headers,
+            })
+            getProductsFromApi();
+            alert("Product " + productId + " deleted.");
         } catch (error) {
             console.log(error);
         }
@@ -45,19 +54,17 @@ const ProductsTableScreen = ({navigation, route}) => {
 
         React.useCallback(() => {
 
-            getUserData();
             getProductsFromApi();
-            console.log("THE SCREEN WAS FOCUSED!")
+            console.log("THE PRODUCT TABLE'S SCREEN WAS FOCUSED!")
            
 
             return () => {
                 // Do something when the screen is unfocused
-                   console.log("THE SCREEN WAS UNFOCUSED!")
+                   console.log("THE PRODUCT TABLE'S SCREEN WAS UNFOCUSED!")
                  };
 
         }, [navigation])
       );
-
 
     return (
         <View style={styles.container}>
@@ -68,19 +75,24 @@ const ProductsTableScreen = ({navigation, route}) => {
                 </View>
             </View>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cross_icon}>
-                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/cross-symbol-white.png") : require("../../../assets/icons/cross-symbol.png")}/>
+                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/back-white.png") : require("../../../assets/icons/back.png")}/>
             </TouchableOpacity>
 
             <View style={{marginTop: '15%', width: '100%'}}>
                 <TableHeader />
-                <ScrollView style={styles.dataWrapper}>
+                <ScrollView style={{ marginBottom: '30%'}}>
                     {
                         products.map((product, index) => {
-                            return <TableRow key={index} product={product} navigation={navigation}/>
+                            return <TableRow key={index} product={product} navigation={navigation} deleteProduct={deleteProduct} categoryId={categoryId} userData={userData}/>
                         })
                     }
                 </ScrollView>
             </View>
+
+            <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("CreateProductForm", {categoryId: categoryId, userData:userData})}>
+                <Text style={[styles.large_txt, {color: '#fff', marginTop: 14,}]}>Add New Product</Text>
+            </TouchableOpacity>
+
         </View>
     )
 }
@@ -109,7 +121,7 @@ export const TableHeader = () => {
     
 }
 
-export const TableRow = ({product, navigation}) => {
+export const TableRow = ({product, navigation, deleteProduct, categoryId, userData}) => {
 
     return (
         <View style={styles.row}>
@@ -119,13 +131,13 @@ export const TableRow = ({product, navigation}) => {
             <View style={[styles.cel, {width: '45%',}]}>
                 <Text style={styles.small_txt}>{product?.name}</Text>
             </View>
-            <TouchableOpacity style={[styles.cel, {width: '15%',}]}>
+            <TouchableOpacity style={[styles.cel, {width: '15%',}]} onPress={() => navigation.navigate("EditProductForm", {categoryId: categoryId, userData:userData, product: product})}>
                 <Text style={[styles.small_txt, {color: '#126'}]}>EDIT</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.cel, {width: '15%',}]}>
+            <TouchableOpacity style={[styles.cel, {width: '15%',}]} onPress={() => deleteProduct(product?.id)}>
                 <Text style={[styles.small_txt, {color: '#126'}]}>DELETE</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.cel, {width: '15%',}]}>
+            <TouchableOpacity style={[styles.cel, {width: '15%',}]} onPress={() => navigation.navigate("UploadProductImage", {productId: product?.id, userData: userData, categoryId: categoryId})}>
                 <Text style={[styles.small_txt, {color: '#126'}]}>ADD IMAGE</Text>
             </TouchableOpacity>
         </View>
@@ -198,7 +210,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         position: 'absolute',
-        top: '15%',
+        top: '6%',
         left: '2%',
 
     },
@@ -227,7 +239,18 @@ const styles = StyleSheet.create({
 
         borderWidth: 1,
         borderColor: '#000',
-    }
+    },
+    btn: {
+        width: '50%',
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+        backgroundColor: '#0BB798',
+        position: 'absolute',
+        top: '13.5%',
+        right: '2%',
+    },
 })
 
 export default ProductsTableScreen;

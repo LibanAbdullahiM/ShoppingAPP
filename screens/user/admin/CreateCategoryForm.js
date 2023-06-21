@@ -1,39 +1,29 @@
 import * as React from 'react';
 import {View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, ScrollView, Image, ToastAndroid} from 'react-native';
 import { useState, useEffect } from 'react';
-import Toast from 'react-native-toast-message';
 import Input from '../../../components/Input';
 
 const base64 = require('base-64');
 
 const {width} = Dimensions.get("window");
 
-const EditProductForm = ({navigation, route}) => {
+const CreateCategoryForm = ({navigation, route}) => {
 
-    const {categoryId, userData, product} = route.params;
+    const {userData} = route.params;
 
-    const [name, changeName] = useState(product.name);
-    const [brand, changeBrand] = useState(product.brand);
-    const [price, changePrice] = useState(product.price);
-    const [inStock, changeInStock] = useState(product.inStock);
-    const [description, changeDescription] = useState(product.description);
+    const [name, changeName] = useState('');
 
     const userName = userData.userName;
     const password = userData.password;
-
-    console.log(userData);
 
     let headers = new Headers();
     headers.append("Authorization", "Basic " + base64.encode(userName+":"+password));
 
 
-    const editProduct = async (productId) => {
+    const createNewCategory = async () => {
 
-        if(!name)  ToastAndroid.showWithGravityAndOffset("Product name is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!brand)  ToastAndroid.showWithGravityAndOffset("Brand name is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!price)  ToastAndroid.showWithGravityAndOffset("Price is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!inStock)  ToastAndroid.showWithGravityAndOffset("InStock is required", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-       
+        if(!name)  ToastAndroid.showWithGravityAndOffset("Category name is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
+     
         else {
 
             try {
@@ -54,8 +44,8 @@ const EditProductForm = ({navigation, route}) => {
                 //         }),
                 // })
 
-                const response = await fetch('http://192.168.1.104:8080/api/v1/products/' + categoryId + "/" + productId + "/edit", {
-                    method: 'PUT',
+                const response = await fetch('http://192.168.1.104:8080/api/v1/categories/',{
+                    method: 'POST',
                     headers: {
                         Accept: 'application/json',
                         'Content-Type': 'application/json',
@@ -63,17 +53,13 @@ const EditProductForm = ({navigation, route}) => {
                     },
                     body: JSON.stringify({
                             name: name,
-                            description: description,
-                            brand: brand,
-                            price: price,
-                            inStock: inStock,
 
                         }),
                 })
                 if(response.ok){
                     const data = await response.json();
-                    navigation.navigate("ProductsTableScreen", {categoryId: categoryId, userData: userData})
-                    alert("Product " + productId + " edited")
+                    navigation.navigate("CategoriesTableScreen", {userData: userData})
+                    alert("Category " + data.id + " added to the DB.")
                 }else{
                     ToastAndroid.showWithGravityAndOffset("There is some thing wrong. please try again!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
                 }
@@ -101,7 +87,7 @@ const EditProductForm = ({navigation, route}) => {
                     alignItems: 'center',
            }}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cross_icon}>
-                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/cross-symbol-white.png") : require("../../../assets/icons/cross-symbol.png")}/>
+                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/back-white.png") : require("../../../assets/icons/back.png")}/>
                 </TouchableOpacity>
                 <View style={styles.card}>
                     <Text style={styles.large_txt}>Редактировать товар</Text>
@@ -110,35 +96,8 @@ const EditProductForm = ({navigation, route}) => {
                         input: styles.input,
                         large_txt: styles.large_txt
                     }} label="Name" value={name} onChangeText={changeName} type="name" capitalize='sentences'  editable={true}/>
-                    <Input styles={{
-                        form_row: styles.form_row,
-                        input: styles.input,
-                        large_txt: styles.large_txt
-                    }} label="Brand" value={brand} onChangeText={changeBrand} type="name" capitalize='sentences'  editable={true}/>
-                    <Input styles={{
-                        form_row: styles.form_row,
-                        input: styles.input,
-                        large_txt: styles.large_txt
-                    }} label="Price" value={`${price}`} onChangeText={changePrice} type="off" capitalize='none'  editable={true}/>
-                    <Input styles={{
-                        form_row: styles.form_row,
-                        input: styles.input,
-                        large_txt: styles.large_txt
-                    }} label="InStock" value={`${inStock}`} onChangeText={changeInStock} type="off" capitalize='none'  editable={true}/>
-                    <View style={styles.form_row}>
-                        <Text style={[styles.large_txt, {marginTop: 12,}]}>Description</Text>
-                        <TextInput
-                        style={[styles.input, {height: 150, justifyContent: 'flex-start', alignItems: 'flex-start', textAlignVertical: 'top'}]}
-                        multiline={true}
-                        numberOfLines={10}
-                        placeholder="Описание"
-                        value={description}
-                        onChangeText={changeDescription}
-                        autoCapitalize="sentences" 
-                        />
-                    </View>
-                </View>
-                <TouchableOpacity style={styles.btn} onPress={() => editProduct(product?.id)}>
+                   </View>
+                <TouchableOpacity style={styles.btn} onPress={createNewCategory}>
                         <Text style={[styles.large_txt, {color: '#fff',  marginTop: 10,}]}>Сохранить</Text>
                 </TouchableOpacity>
            </ScrollView>
@@ -255,4 +214,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default EditProductForm;
+export default CreateCategoryForm;

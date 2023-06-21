@@ -44,7 +44,12 @@ const ShoppingCart = ({navigation, route}) => {
 
         setListCarts([])
 
+    console.log("GETCARTSFROM API GET CALLED")
+
         try {
+            // const response = await fetch('http://172.20.10.12:8080/api/v1/shopping-carts',{
+            //     headers: headers,
+            // });
             const response = await fetch('http://192.168.1.104:8080/api/v1/shopping-carts',{
                 headers: headers,
             });
@@ -53,6 +58,7 @@ const ShoppingCart = ({navigation, route}) => {
                 const data = await response.json();
                 //console.log(data); 
                 setListCarts(data);
+                setRefreshing(false);
                 console.log("SHOPPING CARTS ARE LOADED SUCCESSFULLY.....................!");
             }
 
@@ -65,6 +71,10 @@ const ShoppingCart = ({navigation, route}) => {
     const increase_count = async (cartId) => {
 
         try {
+            // await fetch('http://172.20.10.12:8080/api/v1/shopping-carts/' + cartId + '/increase-quantity',{
+            //     method: 'PUT',
+            //     headers: headers,
+            // });
             await fetch('http://192.168.1.104:8080/api/v1/shopping-carts/' + cartId + '/increase-quantity',{
                 method: 'PUT',
                 headers: headers,
@@ -79,6 +89,10 @@ const ShoppingCart = ({navigation, route}) => {
     const decrease_count = async (cartId) => {
 
         try {
+            // await fetch('http://172.20.10.12:8080/api/v1/shopping-carts/' + cartId + '/decrease-quantity',{
+            //     method: 'DELETE',
+            //     headers: headers,
+            // });
             await fetch('http://192.168.1.104:8080/api/v1/shopping-carts/' + cartId + '/decrease-quantity',{
                 method: 'DELETE',
                 headers: headers,
@@ -93,7 +107,10 @@ const ShoppingCart = ({navigation, route}) => {
     const delete_cart = async (cartId) => {
 
         try {
-
+            // await fetch('http://172.20.10.12:8080/api/v1/shopping-carts/' + cartId + '/delete-cart',{
+            //     method: 'DELETE',
+            //     headers: headers,
+            // });
             await fetch('http://192.168.1.104:8080/api/v1/shopping-carts/' + cartId + '/delete-cart',{
                 method: 'DELETE',
                 headers: headers,
@@ -113,21 +130,21 @@ const ShoppingCart = ({navigation, route}) => {
 
             getUserData();
             getCartsFromApi();
-            console.log("THE SCREEN WAS FOCUSED!")
+            console.log("THE SHOPPING CART SCREEN WAS FOCUSED!")
            
 
             return () => {
                 // Do something when the screen is unfocused
-                   console.log("THE SCREEN WAS UNFOCUSED!")
+                   console.log("THE SHOPPING CART SCREEN WAS UNFOCUSED!")
                  };
 
         }, [navigation, count])
       );
 
     const handleRefresh = () => {
-        //setRefreshing(true);
-        //getCartsFromApi();
-        //setRefreshing(false);
+        setRefreshing(true);
+        getCartsFromApi();
+       
     }
 
     return (
@@ -157,6 +174,7 @@ const ShoppingCart = ({navigation, route}) => {
                                             <View style={styles.image_View}>
                                                 <Image style={styles.image} source={{                                                                                                                                   
                                                     uri: 'http://192.168.1.104:8080/api/v1/products/'+ cart?.product?.id +'/images/' + 0
+                                                    //uri: 'http://172.20.10.12:8080/api/v1/products/'+ cart?.product?.id +'/images/' + 0
                                                 }}/>
                                             </View>
                                             <View style={styles.cart_text_view}>

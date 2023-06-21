@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView , ActivityIndicator} from "react-native";
-import TableRowComPonent from "./TableRowComponent";
-import TableHeaderComponent from "./TableHeaderComponent";
+
+const base64 = require('base-64');
 
 const width = Dimensions.get("window");
 
 const CategoriesTableScreen = ({navigation, route}) => {
 
     const {userData} = route.params;
-    
+
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    
+    const userName = userData.userName;
+    const password = userData.password;
+
+    let headers = new Headers();
+    headers.append("Authorization", "Basic " + base64.encode(userName+":"+password));
 
     const getCategoriesFromApi = async () => {
 
@@ -19,6 +26,7 @@ const CategoriesTableScreen = ({navigation, route}) => {
         setCategories([]);
 
         try {
+            //const response = await fetch('http://172.20.10.12:8080/api/v1/categories');
             const response = await fetch('http://192.168.1.104:8080/api/v1/categories');
             if(response.ok){
                 const data = await response.json();
@@ -32,18 +40,31 @@ const CategoriesTableScreen = ({navigation, route}) => {
         }
     }
 
+    const deleteCategory = async (categoryId) => {
+        try {
+            await fetch('http://192.168.1.104:8080/api/v1/categories/' + categoryId,{
+                method: 'DELETE',
+                headers: headers,
+            })
+            getCategoriesFromApi();
+            alert("Category " + productId + " deleted.");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useFocusEffect(
 
         React.useCallback(() => {
 
     
             getCategoriesFromApi();
-            console.log("THE SCREEN WAS FOCUSED!")
+            console.log("THE CATEGORIES SCREEN WAS FOCUSED!")
            
 
             return () => {
                 // Do something when the screen is unfocused
-                   console.log("THE SCREEN WAS UNFOCUSED!")
+                   console.log("THE CATEGORIES SCREEN WAS UNFOCUSED!")
                  };
 
         }, [navigation])
@@ -57,24 +78,30 @@ const CategoriesTableScreen = ({navigation, route}) => {
                     <Text style={[styles.large_txt, {marginTop: 8, marginLeft: 16, marginBottom: 16,}]}>Список категорий</Text>
                 </View>
             </View>
+
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cross_icon}>
-                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/cross-symbol-white.png") : require("../../../assets/icons/cross-symbol.png")}/>
+                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/back-white.png") : require("../../../assets/icons/back.png")}/>
             </TouchableOpacity>
 
-            <View style={{marginTop: '15%', width: '100%'}}>
+            <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("CreateCategoryForm", {userData: userData})}>
+                        <Text style={[styles.large_txt, {color: '#fff',  marginTop: 10,}]}>Add New Category</Text>
+            </TouchableOpacity>
+
+            <View style={{marginTop: '15%', width: '100%', height: '100%',}}>
                 <TableHeader />
-               {
-                 loading ?
-                 <ActivityIndicator size={'large'}/>
-                 :
-                 <ScrollView style={styles.dataWrapper}>
-                     {
-                         categories.map((category, index) => {
-                             return <TableRow key={index} ID={category?.id} NAME={category?.name} navigation={navigation}/>
-                         })
-                     }
-                 </ScrollView>
-               }
+          
+                {
+                    loading ?
+                    <ActivityIndicator size={'large'}/>
+                    :
+                    <ScrollView style={{ marginBottom: '30%'}} >
+                        {
+                            categories.map((category, index) => {
+                                return <TableRow key={index} category={category} navigation={navigation} userData={userData} deleteCategory={deleteCategory}/>
+                            })
+                        }
+                    </ScrollView>
+                }
             </View>
         </View>
     )
@@ -104,23 +131,23 @@ export const TableHeader = () => {
     
 }
 
-export const TableRow = ({ID, NAME, navigation}) => {
+export const TableRow = ({category, navigation, userData, deleteCategory}) => {
 
     return (
         <View style={styles.row}>
-            <View style={[styles.cel, {width: '9%',}]}>
-                <Text style={styles.small_txt}>{ID}</Text>
-            </View>
+            <TouchableOpacity style={[styles.cel, {width: '9%',}]} onPress={() =>  navigation.navigate("UploadCategoryImage", {category: category, userData: userData})}>
+                <Text style={styles.small_txt}>{category?.id}</Text>
+            </TouchableOpacity>
             <View style={[styles.cel, {width: '45%',}]}>
-                <Text style={styles.small_txt}>{NAME}</Text>
+                <Text style={styles.small_txt}>{category?.name}</Text>
             </View>
-            <TouchableOpacity style={[styles.cel, {width: '15%',}]}>
+            <TouchableOpacity style={[styles.cel, {width: '15%',}]} onPress={() => navigation.navigate("EditCategoryForm", {category: category, userData: userData})}>
                 <Text style={[styles.small_txt, {color: '#126'}]}>EDIT</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.cel, {width: '15%',}]}>
+            <TouchableOpacity style={[styles.cel, {width: '15%',}]} onPress={() => deleteCategory(category?.id)}>
                 <Text style={[styles.small_txt, {color: '#126'}]}>DELETE</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.cel, {width: '15%',}]} onPress={() => navigation.navigate("ProductsTableScreen", {categoryId: ID})}>
+            <TouchableOpacity style={[styles.cel, {width: '15%',}]} onPress={() => navigation.navigate("ProductsTableScreen", {categoryId: category?.id, userData: userData})}>
                 <Text style={[styles.small_txt, {color: '#126'}]}>PRODUCTS</Text>
             </TouchableOpacity>
         </View>
@@ -193,7 +220,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         position: 'absolute',
-        top: '15%',
+        top: '6%',
         left: '5%',
 
     },
@@ -222,7 +249,18 @@ const styles = StyleSheet.create({
 
         borderWidth: 1,
         borderColor: '#000',
-    }
+    },
+    btn: {
+        width: '50%',
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+        backgroundColor: '#0BB798',
+        position: 'absolute',
+        top: '13.5%',
+        right: '2%',
+    },
 })
 
 export default CategoriesTableScreen;

@@ -4,53 +4,80 @@ import { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import Input from '../../../components/Input';
 
+const base64 = require('base-64');
+
 const {width} = Dimensions.get("window");
 
 const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-const CreateProductForm = ({navigation}) => {
+const CreateProductForm = ({navigation, route}) => {
 
-    const [firstName, changeFirstName] = useState('');
-    const [lastName, changeLastName] = useState('');
-    const [email, changeEmail] = useState('');
-    const [phoneNumber, changePhoneNumber] = useState('');
-    const [userName, changeUserName] = useState('');
-    const [password, changePassword] = useState('');
+    const {categoryId, userData} = route.params;
 
-    const registring = async () => {
+    const [name, changeName] = useState('');
+    const [brand, changeBrand] = useState('');
+    const [price, changePrice] = useState('');
+    const [inStock, changeInStock] = useState('');
+    const [description, changeDescription] = useState('');
 
-        if(!firstName)  ToastAndroid.showWithGravityAndOffset("First name is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!lastName)  ToastAndroid.showWithGravityAndOffset("Last name is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!email)  ToastAndroid.showWithGravityAndOffset("Email is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!email.match(regex))  ToastAndroid.showWithGravityAndOffset("Invalid Email", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!userName)  ToastAndroid.showWithGravityAndOffset("Username is required", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
-        else if (!password || password.length < 8)  ToastAndroid.showWithGravityAndOffset("The password must be at least 8 characters", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
+    const userName = userData.userName;
+    const password = userData.password;
 
+    console.log(userName);
+    console.log(password);
+
+    let headers = new Headers();
+    headers.append("Authorization", "Basic " + base64.encode(userName+":"+password));
+
+    const createNewProduct = async () => {
+
+        if(!name)  ToastAndroid.showWithGravityAndOffset("Product name is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
+        else if (!brand)  ToastAndroid.showWithGravityAndOffset("Brand name is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
+        else if (!price)  ToastAndroid.showWithGravityAndOffset("Price is required!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
+        else if (!inStock)  ToastAndroid.showWithGravityAndOffset("InStock is required", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
+       
         else {
 
             try {
 
-                const response = await fetch('http://192.168.1.104:8080/api/v1/register', {
+                // const response = await fetch('http://172.20.10.12:8080/api/v1/register', {
+                //     method: 'POST',
+                //     headers: {
+                //         Accept: 'application/json',
+                //         'Content-Type': 'application/json',
+                //         },
+                //         body: JSON.stringify({
+                //             firstName: firstName,
+                //             lastName: lastName,
+                //             email: email,
+                //             phoneNumber: phoneNumber,
+                //             userName: userName,
+                //             password: password,
+                //         }),
+                // })
+
+                const response = await fetch('http://192.168.1.104:8080/api/v1/categories/' + categoryId + '/products/new', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
                         'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            firstName: firstName,
-                            lastName: lastName,
-                            email: email,
-                            phoneNumber: phoneNumber,
-                            userName: userName,
-                            password: password,
+                        Authorization: "Basic " + base64.encode(userName+":"+password)
+                    },
+                    body: JSON.stringify({
+                            name: name,
+                            description: description,
+                            brand: brand,
+                            price: price,
+                            inStock: inStock,
+
                         }),
                 })
                 if(response.ok){
                     const data = await response.json();
-                    navigation.navigate("Loging")
-                    console.log("You have registred successfully!");
+                    navigation.navigate("ProductsTableScreen", {categoryId: categoryId, userData: userData})
+                   alert("Product " + data.id + " added to the DB.")
                 }else{
-                    ToastAndroid.showWithGravityAndOffset("The User name already exist. please use another one!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
+                    ToastAndroid.showWithGravityAndOffset("There is some thing wrong. please try again!", ToastAndroid.LONG, ToastAndroid.TOP, 10,60);
                 }
                 
                 
@@ -61,7 +88,6 @@ const CreateProductForm = ({navigation}) => {
         }
            
     }
-
     return (
         <View style={[styles.container, {
             justifyContent: 'center',
@@ -76,44 +102,46 @@ const CreateProductForm = ({navigation}) => {
                     alignItems: 'center',
            }}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cross_icon}>
-                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/cross-symbol-white.png") : require("../../../assets/icons/cross-symbol.png")}/>
+                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/back-white.png") : require("../../../assets/icons/back.png")}/>
                 </TouchableOpacity>
                 <View style={styles.card}>
-                    <Text style={styles.large_txt}>Создай Новый аккунт</Text>
+                    <Text style={styles.large_txt}>Создай Новый товар</Text>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="FirstName" value={firstName} onChangeText={changeFirstName} type="name" capitalize='sentences'  editable={true}/>
+                    }} label="Name" value={name} onChangeText={changeName} type="name" capitalize='sentences'  editable={true}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="LastName" value={lastName} onChangeText={changeLastName} type="name" capitalize='sentences'  editable={true}/>
+                    }} label="Brand" value={brand} onChangeText={changeBrand} type="name" capitalize='sentences'  editable={true}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="Email" value={email} onChangeText={changeEmail} type="email" capitalize='none'  editable={true}/>
+                    }} label="Price" value={price} onChangeText={changePrice} type="off" capitalize='none'  editable={true}/>
                     <Input styles={{
                         form_row: styles.form_row,
                         input: styles.input,
                         large_txt: styles.large_txt
-                    }} label="Phone Nmber" value={phoneNumber} onChangeText={changePhoneNumber} type="tel" capitalize='none'  editable={true}/>
-                    <Input styles={{
-                        form_row: styles.form_row,
-                        input: styles.input,
-                        large_txt: styles.large_txt
-                    }} label="UserName" value={userName} onChangeText={changeUserName} type="username" capitalize='none'  editable={true}/>
-                    <Input styles={{
-                        form_row: styles.form_row,
-                        input: styles.input,
-                        large_txt: styles.large_txt
-                    }} label="Password" value={password} onChangeText={changePassword} type="password" capitalize='none'  editable={true}/>
-                    <TouchableOpacity style={styles.btn} onPress={registring}>
-                        <Text style={[styles.large_txt, {color: '#fff',  marginTop: 10,}]}>Зарегистрируйтесь</Text>
-                    </TouchableOpacity>
-                </View>  
+                    }} label="InStock" value={inStock} onChangeText={changeInStock} type="off" capitalize='none'  editable={true}/>
+                    <View style={styles.form_row}>
+                        <Text style={[styles.large_txt, {marginTop: 12,}]}>Description</Text>
+                        <TextInput
+                        style={[styles.input, {height: 150, justifyContent: 'flex-start', alignItems: 'flex-start', textAlignVertical: 'top'}]}
+                        multiline={true}
+                        numberOfLines={10}
+                        placeholder="Описание"
+                        value={description}
+                        onChangeText={changeDescription}
+                        autoCapitalize="sentences" 
+                        />
+                    </View>
+                </View>
+                <TouchableOpacity style={styles.btn} onPress={createNewProduct}>
+                        <Text style={[styles.large_txt, {color: '#fff',  marginTop: 10,}]}>Сохранить</Text>
+                </TouchableOpacity>
            </ScrollView>
         </View>
     )
@@ -177,8 +205,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
-
-        backgroundColor: '#0BB798'
+        backgroundColor: '#0BB798',
+        marginTop: 12,
     },
     form_row: {
         width: '100%',

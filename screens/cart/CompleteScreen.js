@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, ScrollView, RefreshControl } from "react-native";
-import OrderDetails from "./OrderDetails";
 
 const {width} = Dimensions.get("window");
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, ScrollView, RefreshControl } from "react-native";
-import OrderDetails from "./OrderDetails";
+import CustomerDetails from "./CustomerDetails";
 
 const base64 = require('base-64');
 
@@ -30,10 +30,10 @@ const ConfirmationScreen = ({navigation, route}) => {
         }
       }, [navigation]);
 
-    const {totalPrice, totalQuantity, userdetails, orderDetails, listCarts} = route.params;
+    const {totalPrice, totalQuantity, userdetails, customerDetails, listCarts} = route.params;
 
     const completeOrder = async () => {
-        if(listCarts !== null && userdetails !== null & orderDetails !== null){
+        if(listCarts !== null && userdetails !== null & customerDetails !== null){
 
             try {
                 const userName = userdetails.userName;
@@ -49,8 +49,18 @@ const ConfirmationScreen = ({navigation, route}) => {
                         'Content-Type': 'application/json',
                         Authorization: "Basic " + base64.encode(userName+":"+password)
                     },
-                    body: JSON.stringify(orderDetails)
+                    body: JSON.stringify(customerDetails)
                 });
+
+                // const response = await fetch('http://172.20.10.12:8080/api/v1/orders/save',{
+                //     method: "POST",
+                //     headers: {
+                //         Accept: 'application/json',
+                //         'Content-Type': 'application/json',
+                //         Authorization: "Basic " + base64.encode(userName+":"+password)
+                //     },
+                //     body: JSON.stringify(orderDetails)
+                // });
     
                 if(response.ok){
                     const data = await response.json();
@@ -89,7 +99,7 @@ const ConfirmationScreen = ({navigation, route}) => {
                     </View>
                 </View>
 
-                <OrderDetails orderDetails={orderDetails}/>
+                <CustomerDetails customerDetails={customerDetails}/>
 
                 <View style={{width: '95%', height: 120, padding: 4,  backgroundColor: width < 500 ? '#3b3c3d' : '#fff', justifyContent: 'center', alignItems: 'center', borderRadius: 8, marginTop: 16,}}>
 

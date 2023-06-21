@@ -7,39 +7,7 @@ const width = Dimensions.get("window");
 
 const AdminScreen = ({navigation, route}) => {
 
-    const [userData, setUserData] = useState({})
-
-    const getUserData = async () => {
-
-        setUserData({})
-
-        try {
-            const data = await AsyncStorage.getItem("UserDetails");
-            if(data !== null){
-                setUserData(JSON.stringify(data));
-                set_IsLogged(true);
-            }
-        } catch (error) {
-            
-        }
-    }
-
-    useFocusEffect(
-
-        React.useCallback(() => {
-
-            getUserData();
-
-            console.log("THE PROFILE SCREEN WAS FOCUSED!")
-           
-
-            return () => {
-                // Do something when the screen is unfocused
-                   console.log("THE PROFILE SCREEN WAS UNFOCUSED!")
-                 };
-
-        }, [navigation])
-      );
+    const {userData} = route.params;
 
     return (
         <View style={styles.container}>
@@ -49,9 +17,11 @@ const AdminScreen = ({navigation, route}) => {
                     <Text style={[styles.large_txt, {marginTop: 8, marginLeft: 16, marginBottom: 16,}]}>Административный раздел</Text>
                 </View>
             </View>
+
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.cross_icon}>
-                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/cross-symbol-white.png") : require("../../../assets/icons/cross-symbol.png")}/>
+                    <Image style={styles.icon} source={width < 500 ? require("../../../assets/icons/back-white.png") : require("../../../assets/icons/back.png")}/>
             </TouchableOpacity>
+
             <View style={styles.card}>
                 <TouchableOpacity style={styles.touchableOpacity} onPress={() => navigation.navigate("CategoriesTableScreen", {userData: userData})}>
                     <Text style={[styles.large_txt]}>Список категорий</Text>
@@ -159,7 +129,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         position: 'absolute',
-        top: '15%',
+        top: '6%',
         left: '5%',
 
     },

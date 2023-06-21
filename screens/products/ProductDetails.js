@@ -22,7 +22,7 @@ const ProductDetails = ({navigation, route}) => {
     const [loadMore, setLoadMore] = useState(false);
     const [userdetails, setUserdetails] = useState({});
 
-    const {product, title} = route.params;
+    const {product, title, PRODUCTS} = route.params;
 
     const userName = userdetails.userName;
     const password = userdetails.password;
@@ -110,6 +110,10 @@ const ProductDetails = ({navigation, route}) => {
       const addToCart = async () => {
 
         try {
+            // const response = await fetch('http://172.20.10.12:8080/api/v1/shopping-carts/products/' + product?.id + '/add', {
+            //     method: 'POST',
+            //     headers: headers
+            // });
             const response = await fetch('http://192.168.1.104:8080/api/v1/shopping-carts/products/' + product?.id + '/add', {
                 method: 'POST',
                 headers: headers
@@ -164,6 +168,7 @@ const ProductDetails = ({navigation, route}) => {
                             console.log("PRODUCT ID: " + product.id);
                             return  <Image key={i} style={styles.imge}  source={{                                                                                                                                   
                                 uri: 'http://192.168.1.104:8080/api/v1/products/'+ product?.id +'/images/' + i
+                                //uri: 'http://172.20.10.12:8080/api/v1/products/'+ product?.id +'/images/' + i
                             }}/>
                         })
                     }
@@ -182,6 +187,7 @@ const ProductDetails = ({navigation, route}) => {
                             return  <View key={k} style={styles.paginationImageView}>
                                         <Image style={k === active ? styles.paginationActiveImage : styles.paginationImage} source={{                                                                                                                                   
                                                 uri: 'http://192.168.1.104:8080/api/v1/products/'+ product?.id +'/images/' + i
+                                                //uri: 'http://172.20.10.12:8080/api/v1/products/'+ product?.id +'/images/' + i
                                             }}/>
                                     </View>
                         })
@@ -205,6 +211,9 @@ const ProductDetails = ({navigation, route}) => {
                     <Text style={[styles.large_txt, {color: '#4ab8f7'}]}>{loadMore ? 'Свернуть ':'Читать полностью..... '}</Text>
                 </TouchableOpacity>
             </View>
+           <View style={{width: '100%', marginBottom: '20%'}}>
+                <Products products={PRODUCTS} title='Похожие Товары' navigation={navigation} route={route}/>
+           </View>
             </ScrollView>
             <View style={styles.buttons}>
                 <TouchableOpacity style={[styles.btn, {backgroundColor: 'rgba(201, 4, 4, 1)'}]}>
@@ -233,6 +242,7 @@ const ProductDetails = ({navigation, route}) => {
                              <View style={styles.modal_image_view}>
                                 <Image style={styles.modal_image} source={{                                                                                                                                   
                                                 uri: 'http://192.168.1.104:8080/api/v1/products/'+ product?.id +'/images/' + 0
+                                                //uri: 'http://172.20.10.12:8080/api/v1/products/'+ product?.id +'/images/' + 0
                                             }}/>
                              </View>
                              <View style={styles.success_info}>
@@ -327,7 +337,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 8,
         padding: 8,
-        marginBottom: '30%',
+        //marginBottom: '30%',
 
         borderBottomWidth: 0.4,
 

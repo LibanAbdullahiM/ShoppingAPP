@@ -22,7 +22,6 @@ const Tap = createBottomTabNavigator();
 
 export default function App() {
 
-  const [badgeCount, setBadgeCount] = useState(0);
   const [userdetails, setUserdetails] = useState({});
   const [isLogged, setIsLogged] = useState(false);
 
@@ -89,7 +88,6 @@ export default function App() {
           )
         }}}/>
         <Tap.Screen name='CartNativeStack' component={CartNativeStack} options={{
-          tabBarBadge: badgeCount ? badgeCount : 0,
           tabBarIcon: ({focused, size, color}) => {
           return (
             <FontAwesome
@@ -100,7 +98,6 @@ export default function App() {
         }}}
         initialParams={{
           userdetails: userdetails,
-          setBadgeCount: setBadgeCount,
         }}/>
         <Tap.Screen name='Account' component={Account} options={{tabBarIcon: ({focused, size, color}) => {
           return (

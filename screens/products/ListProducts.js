@@ -17,7 +17,7 @@ const ListProducts = ({navigation, route}) => {
     const getProductsFromAPI = async () =>{
 
         try {
-            
+            //const response = await fetch('http://172.20.10.12:8080/api/v1/categories/' + categoryId + '/products');
             const response = await fetch('http://192.168.1.104:8080/api/v1/categories/' + categoryId + '/products');
             if(response.ok){
                 const data = await response.json();
